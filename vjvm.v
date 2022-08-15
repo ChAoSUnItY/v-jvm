@@ -1,7 +1,7 @@
 module main
 
 import vjvm
-import vjvm.cmd { parse_cmd }
+import vjvm.cmd { Cmd, parse_cmd }
 
 fn main() {
 	cmd := parse_cmd()?
@@ -13,8 +13,11 @@ fn main() {
 		cmd.version_flag {
 			println(vjvm.version)
 		}
-		else {}
+		else {
+			start_jvm(cmd)
+		}
 	}
+}
 
-	println(cmd)
+fn start_jvm(cmd &Cmd) {
 }
