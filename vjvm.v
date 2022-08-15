@@ -15,4 +15,6 @@ fn main() {
 		}
 		else {}
 	}
+
+	println(cmd)
 }

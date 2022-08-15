@@ -18,7 +18,6 @@ pub fn parse_cmd() ?&Cmd {
 	mut fp := flag.new_flag_parser(os.args)
 	fp.application('v jvm')
 	fp.version(vjvm.version)
-	fp.limit_free_args(0, 0)?
 	fp.usage_example('Usage: ${os.args[0]} [-options] class [args...]\n')
 	fp.skip_executable()
 
