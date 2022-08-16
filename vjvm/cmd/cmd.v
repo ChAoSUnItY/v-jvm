@@ -14,8 +14,8 @@ pub mut:
 	args         []string
 }
 
-pub fn parse_cmd() ?&Cmd {
-	mut cmd := &Cmd{}
+pub fn parse_cmd() ?Cmd {
+	mut cmd := Cmd{}
 	mut fp := flag.new_flag_parser(os.args)
 	fp.application('v jvm')
 	fp.version(vjvm.version)

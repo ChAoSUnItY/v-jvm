@@ -38,8 +38,8 @@ pub fn (mut classfile ClassFile) read_u8_array() []u8 {
 	len := classfile.read_u8()
 	arr := []u16{len: int(len)}
 
-	for _ in 0 .. len {
-		arr << classfile.read_u8()
+	for i in 0 .. len {
+		arr[i] = classfile.read_u8()
 	}
 
 	return arr
@@ -49,8 +49,8 @@ pub fn (mut classfile ClassFile) read_u16_array() []u16 {
 	len := classfile.read_u16()
 	arr := []u16{len: int(len)}
 
-	for _ in 0 .. len {
-		arr << classfile.read_u16()
+	for i in 0 .. len {
+		arr[i] = classfile.read_u16()
 	}
 
 	return arr

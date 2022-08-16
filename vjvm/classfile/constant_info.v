@@ -19,8 +19,71 @@ const (
 	constant_invoke_dynamic      = 18
 )
 
+/*
+cp_info {
+    u1 tag;
+    u1 info[];
+}
+*/
 interface ConstantInfo {
 	read_info(mut ClassReader)
+}
+
+fn (mut reader ClassReader) read_constant_info(pool &ConstantPool) ConstantInfo {
+	tag := reader.read_u8()
+	info := new_constant_info(tag, pool)
+	info.read_info(mut reader)
+	return info
+}
+
+fn new_constant_info(tag u8, pool &ConstantPool) ConstantInfo {
+	return match tag {
+		classfile.constant_class {
+			ConstantClassInfo{pool}
+		}
+		classfile.constant_fieldref {
+			ConstantFieldRefInfo{pool}
+		}
+		classfile.constant_methodref {
+			ConstantMethodRefInfo{pool}
+		}
+		classfile.constant_interface_methodref {
+			ConstantInterfaceRefInfo{pool}
+		}
+		classfile.constant_string {
+			ConstantStringInfo{}
+		}
+		classfile.constant_integer {
+			ConstantIntegerInfo{}
+		}
+		classfile.constant_float {
+			ConstantFloatInfo{}
+		}
+		classfile.constant_long {
+			ConstantFloatInfo{}
+		}
+		classfile.constant_double {
+			ConstantDoubleInfo{}
+		}
+		classfile.constant_name_and_type {
+			ConstantNameAndTypeInfo{pool}
+		}
+		classfile.constant_utf8 {
+			ConstantUtf8Info{}
+		}
+		classfile.constant_method_handle {
+			ConstantMethodHandleInfo{}
+		}
+		classfile.constant_method_type {
+			ConstantMethodTypeInfo{}
+		}
+		classfile.constant_invoke_dynamic {
+			ConstantInvokeDynamicInfo{}
+		}
+		else {
+			panic('java.lang.ClassFormatError: Invalid constant info tag')
+		}
+	}
 }
 
 /*

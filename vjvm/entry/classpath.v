@@ -3,9 +3,9 @@ module entry
 import os { exists, getenv_opt, join_path, join_path_single }
 
 struct ClassPath {
-	boot_classpath &Entry
-	ext_classpath  &Entry
-	user_classpath &Entry
+	boot_classpath Entry
+	ext_classpath  Entry
+	user_classpath Entry
 }
 
 pub fn parse_cp(jre_option string, cp_option string) ?&ClassPath {
@@ -38,7 +38,7 @@ fn get_jre_dir(jre_option string) ?string {
 	}
 }
 
-fn parse_user_dir(cp_option string) &Entry {
+fn parse_user_dir(cp_option string) Entry {
 	return new_entry(if cp_option.len == 0 { '.' } else { cp_option })
 }
 
