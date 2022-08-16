@@ -1,8 +1,8 @@
-module vjvm
+module entry
 
 import os { exists, getenv_opt, join_path, join_path_single }
 
-pub struct ClassPath {
+struct ClassPath {
 	boot_classpath &Entry
 	ext_classpath  &Entry
 	user_classpath &Entry

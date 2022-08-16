@@ -1,6 +1,7 @@
 module main
 
-import vjvm { parse_cp }
+import vjvm
+import vjvm.entry { parse_cp }
 import vjvm.cmd { Cmd, parse_cmd }
 
 fn main() {

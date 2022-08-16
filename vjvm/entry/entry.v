@@ -1,14 +1,14 @@
-module vjvm
+module entry
 
 import os { abs_path, join_path_single, read_bytes, walk }
 import szip { CompressionLevel, OpenMode, open }
 
 interface Entry {
-	read_class(class_name string) ?([]u8, &Entry)
+	read_class(string) ?([]u8, &Entry)
 	str() string
 }
 
-pub fn new_entry(path string) &Entry {
+fn new_entry(path string) &Entry {
 	return if path.contains(os.path_separator) {
 		&Entry(new_composite_entry(path))
 	} else if path.ends_with('*') {
@@ -25,7 +25,7 @@ struct DirEntry {
 	abs_dir string
 }
 
-pub fn new_dir_entry(path string) DirEntry {
+fn new_dir_entry(path string) DirEntry {
 	return DirEntry{abs_path(path)}
 }
 
@@ -35,13 +35,13 @@ pub fn (dir_entry &DirEntry) read_class(class_name string) ?([]u8, &Entry) {
 	return bytecode, dir_entry
 }
 
-pub fn (dir_entry &DirEntry) str() string {
+fn (dir_entry &DirEntry) str() string {
 	return dir_entry.abs_dir
 }
 
 type CompositeEntry = []Entry
 
-pub fn new_composite_entry(path string) CompositeEntry {
+fn new_composite_entry(path string) CompositeEntry {
 	mut composite_entry := []Entry{}
 
 	for path_ in path.split(os.path_separator) {
@@ -59,7 +59,7 @@ pub fn (composite_entry &CompositeEntry) read_class(class_name string) ?([]u8, &
 	return error('Class not found: $class_name')
 }
 
-pub fn (composite_entry &CompositeEntry) str() string {
+fn (composite_entry &CompositeEntry) str() string {
 	mut segments := []string{cap: composite_entry.len}
 
 	for entry in composite_entry {
@@ -69,7 +69,7 @@ pub fn (composite_entry &CompositeEntry) str() string {
 	return segments.join(os.path_separator)
 }
 
-pub fn new_wildcard_entry(path string) CompositeEntry {
+fn new_wildcard_entry(path string) CompositeEntry {
 	base_dir := path[..path.len - 1]
 	mut composite_entry := &[]Entry{}
 
@@ -85,11 +85,11 @@ pub fn new_wildcard_entry(path string) CompositeEntry {
 	return CompositeEntry(*composite_entry)
 }
 
-pub struct ZipEntry {
+struct ZipEntry {
 	abs_path string
 }
 
-pub fn new_zip_entry(path string) ZipEntry {
+fn new_zip_entry(path string) ZipEntry {
 	return ZipEntry{abs_path(path)}
 }
 
@@ -113,6 +113,6 @@ pub fn (zip_entry &ZipEntry) read_class(class_name string) ?([]u8, &Entry) {
 	}
 }
 
-pub fn (zip_entry &ZipEntry) str() string {
+fn (zip_entry &ZipEntry) str() string {
 	return zip_entry.abs_path
 }
