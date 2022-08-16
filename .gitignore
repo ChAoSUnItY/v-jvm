@@ -7,3 +7,5 @@ v_jvm
 *.dylib
 *.dll
 vls.log
+*.log
+*.def

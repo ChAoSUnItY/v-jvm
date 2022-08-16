@@ -15,16 +15,18 @@ fn main() {
 			println(vjvm.version)
 		}
 		else {
-			start_jvm(cmd)?
+			start_jvm(&cmd)?
 		}
 	}
+
+	gc_check_leaks()
 }
 
 fn start_jvm(cmd &Cmd) ? {
 	cp := parse_cp(cmd.x_jre_option, cmd.cp_option)?
-	class_name := cmd.class.replace('.', '/')
+	class_name := cmd.class_name.replace('.', '/')
 	class_data, _ := cp.read_class(class_name) or {
-		return error('Unable to find or load main class $cmd.class')
+		return error('Unable to find or load main class $cmd.class_name')
 	}
 	println(class_data)
 }

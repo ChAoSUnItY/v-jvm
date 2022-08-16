@@ -10,7 +10,7 @@ pub mut:
 	version_flag bool
 	x_jre_option string
 	cp_option    string
-	class        string
+	class_name   string
 	args         []string
 }
 
@@ -34,7 +34,7 @@ pub fn parse_cmd() ?Cmd {
 	}
 
 	if additional_args.len > 0 {
-		cmd.class = additional_args[0]
+		cmd.class_name = additional_args[0]
 		cmd.args = additional_args[1..]
 	}
 
