@@ -8,16 +8,16 @@ interface Entry {
 	str() string
 }
 
-pub fn new_entry(path string) Entry {
+pub fn new_entry(path string) &Entry {
 	return if path.contains(os.path_separator) {
-		Entry(new_composite_entry(path))
+		&Entry(new_composite_entry(path))
 	} else if path.ends_with('*') {
-		Entry(new_wildcard_entry(path))
+		&Entry(new_wildcard_entry(path))
 	} else if path.ends_with('.zip') || path.ends_with('.ZIP') || path.ends_with('.jar')
 		|| path.ends_with('.JAR') {
-		Entry(new_zip_entry(path))
+		&Entry(new_zip_entry(path))
 	} else {
-		Entry(new_dir_entry(path))
+		&Entry(new_dir_entry(path))
 	}
 }
 
