@@ -71,7 +71,7 @@ pub fn (composite_entry &CompositeEntry) str() string {
 
 pub fn new_wildcard_entry(path string) CompositeEntry {
 	base_dir := path[..path.len - 1]
-	mut composite_entry := []Entry{}
+	mut composite_entry := &[]Entry{}
 
 	walk := fn [mut composite_entry] (path_ string) {
 		if path_.ends_with('.jar') || path_.ends_with('.JAR') {
@@ -82,7 +82,7 @@ pub fn new_wildcard_entry(path string) CompositeEntry {
 
 	walk(base_dir, walk)
 
-	return CompositeEntry(composite_entry)
+	return CompositeEntry(*composite_entry)
 }
 
 pub struct ZipEntry {
@@ -94,7 +94,7 @@ pub fn new_zip_entry(path string) ZipEntry {
 }
 
 pub fn (zip_entry &ZipEntry) read_class(class_name string) ?([]u8, &Entry) {
-	mut zip := open(zip_entry.abs_path, CompressionLevel.best_speed, OpenMode.read_only)?
+	mut zip := open(zip_entry.abs_path, CompressionLevel.default_level, OpenMode.read_only)?
 
 	defer {
 		zip.close()
@@ -102,11 +102,14 @@ pub fn (zip_entry &ZipEntry) read_class(class_name string) ?([]u8, &Entry) {
 
 	zip.open_entry(class_name)?
 
+	if zip.size() == 0 {
+		return error('Invalid entry')
+	}
+
 	unsafe {
 		data := zip.read_entry() or { return error('Class not found: $class_name') }
-		tmp_str := tos(data, int(zip.size()))
 
-		return tmp_str.bytes(), zip_entry
+		return tos(charptr(data), int(zip.size())).bytes(), zip_entry
 	}
 }
 
