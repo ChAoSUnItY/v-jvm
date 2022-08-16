@@ -24,7 +24,7 @@ pub fn parse_cmd() ?&Cmd {
 
 	cmd.help_flag = fp.bool('help', `h`, false, 'Show usage list')
 	cmd.version_flag = fp.bool('version', `v`, false, 'Show version')
-	cmd.x_jre_option = fp.string('xjre', 0, '', 'path to jre')
+	cmd.x_jre_option = fp.string('Xjre', 0, '', 'path to jre')
 	cmd.cp_option = fp.string('cp', 0, '', 'classpath')
 
 	additional_args := fp.finalize() or {

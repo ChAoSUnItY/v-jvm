@@ -8,7 +8,7 @@ pub struct ClassPath {
 	user_classpath &Entry
 }
 
-pub fn parse(jre_option string, cp_option string) ?&ClassPath {
+pub fn parse_cp(jre_option string, cp_option string) ?&ClassPath {
 	boot_classpath, ext_classpath := parse_boot_ext_dir(jre_option)?
 	user_classpath := parse_user_dir(cp_option)
 	return &ClassPath{boot_classpath, ext_classpath, user_classpath}
@@ -42,7 +42,7 @@ fn parse_user_dir(cp_option string) &Entry {
 	return new_entry(if cp_option.len == 0 { '.' } else { cp_option })
 }
 
-fn (classpath &ClassPath) read_class(class_name string) ?([]u8, &Entry) {
+pub fn (classpath &ClassPath) read_class(class_name string) ?([]u8, &Entry) {
 	class_name_ := class_name + '.class'
 	if bytecode, entry := classpath.boot_classpath.read_class(class_name_) {
 		return bytecode, entry
