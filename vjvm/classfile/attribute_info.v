@@ -155,9 +155,9 @@ EnclosingMethod_attribute {
 }
 */
 struct EnclosingMethodAttribute {
-	pool	&ConstantPool [required]
+	pool &ConstantPool [required]
 mut:
-	class_index u16
+	class_index  u16
 	method_index u16
 }
 
@@ -171,10 +171,10 @@ fn (attr &EnclosingMethodAttribute) class_name() !string {
 }
 
 fn (attr &EnclosingMethodAttribute) method_name_and_descriptor(mut reader ClassReader) !(string, string) {
-	return if attr.method_index > 0 {
-		attr.pool.get_name_and_type(attr.method_index)!
+	if attr.method_index > 0 {
+		return attr.pool.get_name_and_type(attr.method_index)!
 	} else {
-		'', ''
+		return '', ''
 	}
 }
 
@@ -248,16 +248,16 @@ fn (mut attr LocalVariableTableAttribute) read_info(mut reader ClassReader) ! {
 		name_index := reader.read_u16()
 		descriptor_index := reader.read_u16()
 		index := reader.read_u16()
-		attr.local_variable_table << LocalVariableTableEntry{start_pc, length, name_index, signature_index, index}
+		attr.local_variable_table << LocalVariableTableEntry{start_pc, length, name_index, descriptor_index, index}
 	}
 }
 
 struct LocalVariableTableEntry {
-	start_pc        u16
-	length          u16
-	name_index      u16
+	start_pc         u16
+	length           u16
+	name_index       u16
 	descriptor_index u16
-	index           u16
+	index            u16
 }
 
 /*
@@ -298,6 +298,43 @@ struct LocalVariableTypeTableEntry {
 	name_index      u16
 	signature_index u16
 	index           u16
+}
+
+/*
+InnerClasses_attribute {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 number_of_classes;
+    {   u2 inner_class_info_index;
+        u2 outer_class_info_index;
+        u2 inner_name_index;
+        u2 inner_class_access_flags;
+    } classes[number_of_classes];
+}
+*/
+struct InnerClassesAttribute {
+mut:
+	classes []InnerClassInfo = []InnerClassInfo{}
+}
+
+fn (mut attr InnerClassesAttribute) read_info(mut reader ClassReader) ! {
+	len := reader.read_u16()
+	attr.classes = []InnerClassInfo{cap: int(len)}
+
+	for _ in 0 .. len {
+		inner_class_info_index := reader.read_u16()
+		outer_class_info_index := reader.read_u16()
+		inner_name_index := reader.read_u16()
+		inner_class_access_flags := reader.read_u16()
+		attr.classes << InnerClassInfo{inner_class_info_index, outer_class_info_index, inner_name_index, inner_class_access_flags}
+	}
+}
+
+struct InnerClassInfo {
+	inner_class_info_index   u16
+	outer_class_info_index   u16
+	inner_name_index         u16
+	inner_class_access_flags u16
 }
 
 /*
