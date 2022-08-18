@@ -147,6 +147,38 @@ struct BootstrapMethod {
 }
 
 /*
+EnclosingMethod_attribute {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 class_index;
+    u2 method_index;
+}
+*/
+struct EnclosingMethodAttribute {
+	pool	&ConstantPool [required]
+mut:
+	class_index u16
+	method_index u16
+}
+
+fn (mut attr EnclosingMethodAttribute) read_info(mut reader ClassReader) ! {
+	attr.class_index = reader.read_u16()
+	attr.method_index = reader.read_u16()
+}
+
+fn (attr &EnclosingMethodAttribute) class_name() !string {
+	return attr.pool.get_class_name(attr.class_index)!
+}
+
+fn (attr &EnclosingMethodAttribute) method_name_and_descriptor(mut reader ClassReader) !(string, string) {
+	return if attr.method_index > 0 {
+		attr.pool.get_name_and_type(attr.method_index)!
+	} else {
+		'', ''
+	}
+}
+
+/*
 LineNumberTable_attribute {
     u2 attribute_name_index;
     u4 attribute_length;
