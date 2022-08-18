@@ -26,3 +26,19 @@ fn (mut reader ClassReader) read_member(pool &ConstantPool) !MemberInfo {
 	attributes := reader.read_attributes(pool)!
 	return MemberInfo{pool, access_flags, name_index, descriptor_index, attributes}
 }
+
+pub fn (info &MemberInfo) access_flags() u16 {
+	return info.access_flags
+}
+
+pub fn (info &MemberInfo) name() !string {
+	return info.pool.get_utf8(info.name_index)!
+}
+
+pub fn (info &MemberInfo) descriptor() !string {
+	return info.pool.get_utf8(info.descriptor_index)!
+}
+
+pub fn (info &MemberInfo) attributes() []AttributeInfo {
+	return info.attributes
+}

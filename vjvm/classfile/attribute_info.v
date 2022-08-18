@@ -24,7 +24,6 @@ fn (mut reader ClassReader) read_attributes(pool &ConstantPool) ![]AttributeInfo
 fn (mut reader ClassReader) read_attribute(pool &ConstantPool) !AttributeInfo {
 	attr_name_index := reader.read_u16()
 	attr_name := pool.get_utf8(attr_name_index)!
-	dump(attr_name)
 	attr_len := reader.read_u32()
 	mut attr := new_attribute_info(attr_name, attr_len, pool)
 	attr.read_info(mut reader)!

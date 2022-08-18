@@ -21,7 +21,7 @@ ClassFile {
 }
 */
 pub struct ClassFile {
-pub mut:
+mut:
 	minor_version u16
 	major_version u16
 	pool          ConstantPool = ConstantPool{}
@@ -78,4 +78,44 @@ fn (mut cf ClassFile) check_version(mut reader ClassReader) ! {
 	}
 
 	return error('java.lang.UnsupportedClassVersionError: Unsupported class version $cf.major_version')
+}
+
+pub fn (cf &ClassFile) minor_version() u16 {
+	return cf.minor_version
+}
+
+pub fn (cf &ClassFile) major_version() u16 {
+	return cf.major_version
+}
+
+pub fn (cf &ClassFile) pool() &ConstantPool {
+	return &cf.pool
+}
+
+pub fn (cf &ClassFile) access_flags() u16 {
+	return cf.access_flags
+}
+
+pub fn (cf &ClassFile) this_class() !string {
+	return cf.pool.get_class_name(cf.this_class)!
+}
+
+pub fn (cf &ClassFile) super_class() !string {
+	return cf.pool.get_class_name(cf.super_class)!
+}
+
+pub fn (cf &ClassFile) interfaces() ![]string {
+	return cf.interfaces.map(cf.pool.get_class_name(it)!)
+}
+
+pub fn (cf &ClassFile) fields() []MemberInfo {
+	return cf.fields
+}
+
+pub fn (cf &ClassFile) methods() []MemberInfo {
+	return cf.methods
+}
+
+pub fn (cf &ClassFile) attributes() []AttributeInfo {
+	return cf.attributes
 }

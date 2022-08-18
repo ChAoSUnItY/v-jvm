@@ -28,6 +28,14 @@ fn (mut reader ClassReader) read_constant_pool() !ConstantPool {
 	return pool
 }
 
+pub fn (pool &ConstantPool) constant_infos() []ConstantInfo {
+	return pool.infos
+}
+
+pub fn (pool &ConstantPool) len() int {
+	return pool.infos.len
+}
+
 fn (pool &ConstantPool) get_constant_info(index u16) ConstantInfo {
 	if index >= pool.infos.len {
 		panic('Constant pool index out of bound')
@@ -47,7 +55,7 @@ fn (pool &ConstantPool) get_name_and_type(index u16) !(string, string) {
 fn (pool &ConstantPool) get_class_name(index u16) !string {
 	info := pool.get_constant_info(index)
 	if info is ConstantClassInfo {
-		return info.str()
+		return pool.get_utf8(info.name_index)
 	} else {
 		return error('Constant pool index $index is not constant info Class')
 	}
