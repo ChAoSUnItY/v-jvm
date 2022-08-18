@@ -37,6 +37,15 @@ fn new_attribute_info(attr_name string, attr_len u32, pool &ConstantPool) Attrib
 				pool: pool
 			})
 		}
+		'Deprecated' {
+			AttributeInfo(DeprecatedAttribute{})
+		}
+		'Synthetic' {
+			AttributeInfo(SyntheticAttribute{})
+		}
+		'Exceptions' {
+			AttributeInfo(ExceptionAttribute{})
+		}
 		'ConstantValue' {
 			AttributeInfo(ConstantValueAttribute{})
 		}
@@ -97,6 +106,27 @@ fn (mut attr SourceFileAttribute) read_info(mut reader ClassReader) ! {
 
 fn (attr &SourceFileAttribute) file_name() !string {
 	return attr.pool.get_utf8(attr.source_file_index)!
+}
+
+/*
+Exceptions_attribute {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 number_of_exceptions;
+    u2 exception_index_table[number_of_exceptions];
+}
+*/
+struct ExceptionAttribute {
+mut:
+	exception_index_table []u16 = []u16{}
+}
+
+fn (mut attr ExceptionAttribute) read_info(mut reader ClassReader) ! {
+	attr.exception_index_table = reader.read_u16_array()
+}
+
+fn (attr &ExceptionAttribute) exception_index_table() []u16 {
+	return attr.exception_index_table
 }
 
 /*
