@@ -4,7 +4,7 @@ import os { abs_path, join_path_single, read_bytes, walk }
 import szip { CompressionLevel, OpenMode, open }
 
 interface Entry {
-	read_class(string) ?([]u8, &Entry)
+	read_class(string) !([]u8, &Entry)
 	str() string
 }
 
@@ -29,7 +29,7 @@ fn new_dir_entry(path string) DirEntry {
 	return DirEntry{abs_path(path)}
 }
 
-pub fn (dir_entry &DirEntry) read_class(class_name string) ?([]u8, &Entry) {
+pub fn (dir_entry &DirEntry) read_class(class_name string) !([]u8, &Entry) {
 	file_name := join_path_single(dir_entry.abs_dir, class_name)
 	bytecode := read_bytes(file_name) or { return err }
 	return bytecode, dir_entry
@@ -51,7 +51,7 @@ fn new_composite_entry(path string) CompositeEntry {
 	return CompositeEntry(composite_entry)
 }
 
-pub fn (composite_entry &CompositeEntry) read_class(class_name string) ?([]u8, &Entry) {
+pub fn (composite_entry &CompositeEntry) read_class(class_name string) !([]u8, &Entry) {
 	for entry in composite_entry {
 		return entry.read_class(class_name) or { continue }
 	}
@@ -93,14 +93,16 @@ fn new_zip_entry(path string) ZipEntry {
 	return ZipEntry{abs_path(path)}
 }
 
-pub fn (zip_entry &ZipEntry) read_class(class_name string) ?([]u8, &Entry) {
-	mut zip := open(zip_entry.abs_path, CompressionLevel.default_level, OpenMode.read_only)?
+pub fn (zip_entry &ZipEntry) read_class(class_name string) !([]u8, &Entry) {
+	mut zip := open(zip_entry.abs_path, CompressionLevel.default_level, OpenMode.read_only) or {
+		return err
+	}
 
 	defer {
 		zip.close()
 	}
 
-	zip.open_entry(class_name)?
+	zip.open_entry(class_name) or { return err }
 
 	if zip.size() == 0 {
 		return error('Invalid entry')

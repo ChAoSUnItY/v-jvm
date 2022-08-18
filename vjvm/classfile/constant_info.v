@@ -26,62 +26,73 @@ cp_info {
 }
 */
 interface ConstantInfo {
-	read_info(mut ClassReader)
+mut:
+	read_info(mut ClassReader) !
 }
 
-fn (mut reader ClassReader) read_constant_info(pool &ConstantPool) ConstantInfo {
+fn (mut reader ClassReader) read_constant_info(pool &ConstantPool) !ConstantInfo {
 	tag := reader.read_u8()
-	info := new_constant_info(tag, pool)
-	info.read_info(mut reader)
+	mut info := new_constant_info(tag, pool)!
+	info.read_info(mut reader)!
 	return info
 }
 
-fn new_constant_info(tag u8, pool &ConstantPool) ConstantInfo {
-	return match tag {
+fn new_constant_info(tag u8, pool &ConstantPool) !ConstantInfo {
+	match tag {
 		classfile.constant_class {
-			ConstantClassInfo{pool}
+			return ConstantInfo(ConstantClassInfo{
+				pool: pool
+			})
 		}
 		classfile.constant_fieldref {
-			ConstantFieldRefInfo{pool}
+			return ConstantInfo(ConstantFieldRefInfo{
+				pool: pool
+			})
 		}
 		classfile.constant_methodref {
-			ConstantMethodRefInfo{pool}
+			return ConstantInfo(ConstantMethodRefInfo{
+				pool: pool
+			})
 		}
 		classfile.constant_interface_methodref {
-			ConstantInterfaceRefInfo{pool}
+			return ConstantInfo(ConstantInterfaceRefInfo{
+				pool: pool
+			})
 		}
 		classfile.constant_string {
-			ConstantStringInfo{}
+			return ConstantInfo(ConstantStringInfo{
+				pool: pool
+			})
 		}
 		classfile.constant_integer {
-			ConstantIntegerInfo{}
+			return ConstantInfo(ConstantIntegerInfo{})
 		}
 		classfile.constant_float {
-			ConstantFloatInfo{}
+			return ConstantInfo(ConstantFloatInfo{})
 		}
 		classfile.constant_long {
-			ConstantFloatInfo{}
+			return ConstantInfo(ConstantLongInfo{})
 		}
 		classfile.constant_double {
-			ConstantDoubleInfo{}
+			return ConstantInfo(ConstantDoubleInfo{})
 		}
 		classfile.constant_name_and_type {
-			ConstantNameAndTypeInfo{pool}
+			return ConstantInfo(ConstantNameAndTypeInfo{})
 		}
 		classfile.constant_utf8 {
-			ConstantUtf8Info{}
+			return ConstantInfo(ConstantUtf8Info{})
 		}
 		classfile.constant_method_handle {
-			ConstantMethodHandleInfo{}
+			return ConstantInfo(ConstantMethodHandleInfo{})
 		}
 		classfile.constant_method_type {
-			ConstantMethodTypeInfo{}
+			return ConstantInfo(ConstantMethodTypeInfo{})
 		}
 		classfile.constant_invoke_dynamic {
-			ConstantInvokeDynamicInfo{}
+			return ConstantInfo(ConstantInvokeDynamicInfo{})
 		}
 		else {
-			panic('java.lang.ClassFormatError: Invalid constant info tag')
+			return error('java.lang.ClassFormatError: Invalid constant info tag $tag')
 		}
 	}
 }
@@ -93,16 +104,17 @@ CONSTANT_Class_info {
 }
 */
 struct ConstantClassInfo {
-	pool       &ConstantPool [required]
-	name_index u16 = 0
+	pool &ConstantPool [required]
+mut:
+	name_index u16
 }
 
-fn (mut info ConstantClassInfo) read_info(mut reader ClassReader) {
+fn (mut info ConstantClassInfo) read_info(mut reader ClassReader) ! {
 	info.name_index = reader.read_u16()
 }
 
-fn (info &ConstantClassInfo) str() string {
-	return info.get_utf8(info.name_index)
+fn (info &ConstantClassInfo) class_name() !string {
+	return info.pool.get_utf8(info.name_index)!
 }
 
 /*
@@ -113,11 +125,12 @@ CONSTANT_MethodHandle_info {
 }
 */
 struct ConstantMethodHandleInfo {
-	reference_kind  u8  = 0
-	reference_index u16 = 0
+mut:
+	reference_kind  u8
+	reference_index u16
 }
 
-fn (mut info ConstantMethodHandleInfo) read_info(mut reader ClassReader) {
+fn (mut info ConstantMethodHandleInfo) read_info(mut reader ClassReader) ! {
 	info.reference_kind = reader.read_u8()
 	info.reference_index = reader.read_u16()
 }
@@ -129,10 +142,11 @@ CONSTANT_MethodType_info {
 }
 */
 struct ConstantMethodTypeInfo {
-	descriptor_index u16 = 0
+mut:
+	descriptor_index u16
 }
 
-fn (mut info ConstantMethodTypeInfo) read_info(mut reader ClassReader) {
+fn (mut info ConstantMethodTypeInfo) read_info(mut reader ClassReader) ! {
 	info.descriptor_index = reader.read_u16()
 }
 
@@ -144,11 +158,12 @@ CONSTANT_InvokeDynamic_info {
 }
 */
 struct ConstantInvokeDynamicInfo {
-	bootstrap_method_attr_index u16 = 0
-	name_and_type_index         u16 = 0
+mut:
+	bootstrap_method_attr_index u16
+	name_and_type_index         u16
 }
 
-fn (mut info ConstantInvokeDynamicInfo) read_info(mut reader ClassReader) {
+fn (mut info ConstantInvokeDynamicInfo) read_info(mut reader ClassReader) ! {
 	info.bootstrap_method_attr_index = reader.read_u16()
 	info.name_and_type_index = reader.read_u16()
 }
@@ -170,27 +185,36 @@ CONSTANT_InterfaceMethodref_info {
     u2 name_and_type_index;
 }
 */
-type ConstantFieldRefInfo = ConstantClassMemberRefInfo
-type ConstantMethodRefInfo = ConstantClassMemberRefInfo
-type ConstantInterfaceRefInfo = ConstantClassMemberRefInfo
-
-struct ConstantClassMemberRefInfo {
-	pool                &ConstantPool [required]
-	class_index         u16 = 0
-	name_and_type_index u16 = 0
+struct ConstantFieldRefInfo {
+	ConstantClassMemberRefInfo
 }
 
-fn (mut info ConstantClassMemberRefInfo) read_info(mut reader ClassReader) {
+struct ConstantMethodRefInfo {
+	ConstantClassMemberRefInfo
+}
+
+struct ConstantInterfaceRefInfo {
+	ConstantClassMemberRefInfo
+}
+
+struct ConstantClassMemberRefInfo {
+	pool &ConstantPool [required]
+mut:
+	class_index         u16
+	name_and_type_index u16
+}
+
+fn (mut info ConstantClassMemberRefInfo) read_info(mut reader ClassReader) ! {
 	info.class_index = reader.read_u16()
 	info.name_and_type_index = reader.read_u16()
 }
 
-fn (info &ConstantClassMemberRefInfo) class_name() string {
-	return info.pool.get_class_name(info.class_index)
+fn (info &ConstantClassMemberRefInfo) class_name() !string {
+	return info.pool.get_class_name(info.class_index)!
 }
 
-fn (info &ConstantClassMemberRefInfo) name_and_descriptor() (string, string) {
-	return info.pool.get_name_and_type(info.name_and_type_index)
+fn (info &ConstantClassMemberRefInfo) name_and_descriptor() !(string, string) {
+	return info.pool.get_name_and_type(info.name_and_type_index)!
 }
 
 /*
@@ -201,11 +225,12 @@ CONSTANT_NameAndType_info {
 }
 */
 struct ConstantNameAndTypeInfo {
-	name_index       u16 = 0
-	descriptor_index u16 = 0
+mut:
+	name_index       u16
+	descriptor_index u16
 }
 
-fn (mut info ConstantNameAndTypeInfo) read_info(mut reader ClassReader) {
+fn (mut info ConstantNameAndTypeInfo) read_info(mut reader ClassReader) ! {
 	info.name_index = reader.read_u16()
 	info.descriptor_index = reader.read_u16()
 }
@@ -217,10 +242,11 @@ CONSTANT_Integer_info {
 }
 */
 struct ConstantIntegerInfo {
-	val int = 0
+mut:
+	val int
 }
 
-fn (mut info ConstantIntegerInfo) read_info(mut reader ClassReader) {
+fn (mut info ConstantIntegerInfo) read_info(mut reader ClassReader) ! {
 	info.val = int(reader.read_u32())
 }
 
@@ -235,10 +261,11 @@ CONSTANT_Float_info {
 }
 */
 struct ConstantFloatInfo {
-	val f32 = 0
+mut:
+	val f32
 }
 
-fn (mut info ConstantFloatInfo) read_info(mut reader ClassReader) {
+fn (mut info ConstantFloatInfo) read_info(mut reader ClassReader) ! {
 	info.val = f32_from_bits(reader.read_u32())
 }
 
@@ -254,10 +281,11 @@ CONSTANT_Long_info {
 }
 */
 struct ConstantLongInfo {
-	val i64 = 0
+mut:
+	val i64
 }
 
-fn (mut info ConstantLongInfo) read_info(mut reader ClassReader) {
+fn (mut info ConstantLongInfo) read_info(mut reader ClassReader) ! {
 	info.val = i64(reader.read_u64())
 }
 
@@ -273,10 +301,11 @@ CONSTANT_Double_info {
 }
 */
 struct ConstantDoubleInfo {
-	val f64 = 0
+mut:
+	val f64
 }
 
-fn (mut info ConstantDoubleInfo) read_info(mut reader ClassReader) {
+fn (mut info ConstantDoubleInfo) read_info(mut reader ClassReader) ! {
 	info.val = f64_from_bits(reader.read_u64())
 }
 
@@ -290,7 +319,19 @@ CONSTANT_String_info {
     u2 string_index;
 }
 */
-type ConstantStringInfo = ConstantUtf8Info
+struct ConstantStringInfo {
+	pool &ConstantPool [required]
+mut:
+	string_index u16
+}
+
+fn (mut info ConstantStringInfo) read_info(mut reader ClassReader) ! {
+	info.string_index = reader.read_u16()
+}
+
+fn (info &ConstantStringInfo) string() !string {
+	return info.pool.get_utf8(info.string_index)
+}
 
 /*
 CONSTANT_Utf8_info {
@@ -300,30 +341,41 @@ CONSTANT_Utf8_info {
 }
 */
 struct ConstantUtf8Info {
-	str string = ''
+mut:
+	str string
 }
 
-fn (mut info ConstantUtf8Info) read_info(mut reader ClassReader) {
-	len := int(reader.read_u16())
+fn (mut info ConstantUtf8Info) read_info(mut reader ClassReader) ! {
+	len := reader.read_u16()
 	bytes := reader.read_u8_array(len)
-	info.str = decode_mutf8(bytes)
+	info.str = decode_mutf8(bytes)!
 }
 
 fn (info &ConstantUtf8Info) str() string {
 	return info.str
 }
 
+/*
+Synthetic Constant info
+CONSTANT_PlaceHolder_Info {
+}
+*/
+struct ConstantPlaceHolderInfo {}
+
+fn (mut info ConstantPlaceHolderInfo) read_info(mut reader ClassReader) ! {
+}
+
 // mutf8 -> utf16 -> utf32 -> string
 // see java.io.DataInputStream.readUTF(DataInput)
-fn decode_mutf8(segment []byte) ?string {
+fn decode_mutf8(segment []byte) !string {
 	utf_len := segment.len
 
 	mut char_arr := []u16{len: utf_len}
-	mut c, mut c2, mut c3 := u16(0)
-	mut index, mut c_index := 0
+	mut c, mut c2, mut c3 := u16(0), u16(0), u16(0)
+	mut index, mut c_index := 0, 0
 
 	for index < utf_len {
-		c = utf16(segment[index])
+		c = u16(segment[index])
 		if c > 127 {
 			break
 		}
@@ -333,7 +385,7 @@ fn decode_mutf8(segment []byte) ?string {
 	}
 
 	for index < utf_len {
-		c = utf16(segment[index])
+		c = u16(segment[index])
 		match c >> 4 {
 			0...7 {
 				index++
@@ -353,7 +405,7 @@ fn decode_mutf8(segment []byte) ?string {
 				c_index++
 			}
 			14 {
-				count += 3
+				index += 3
 				if index > utf_len {
 					return error('malformed input: index out of bound')
 				}
@@ -371,7 +423,7 @@ fn decode_mutf8(segment []byte) ?string {
 		}
 	}
 
-	char_arr.trim(c_index - 1)
+	char_arr.trim(c_index)
 	runes := char_arr.map(rune(it))
 	return runes.str()
 }

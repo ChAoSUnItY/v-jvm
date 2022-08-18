@@ -1,39 +1,67 @@
 module classfile
 
-struct ClassFile {
-	minor_version u16 = 0
-	major_version u16 = 0
-	pool          ConstantPool = []ConstantInfo{len: 0}
-	access_flags  u16             = 0
-	this_class    u16             = 0
-	super_class   u16             = 0
+/*
+ClassFile {
+    u4             magic;
+    u2             minor_version;
+    u2             major_version;
+    u2             constant_pool_count;
+    cp_info        constant_pool[constant_pool_count-1];
+    u2             access_flags;
+    u2             this_class;
+    u2             super_class;
+    u2             interfaces_count;
+    u2             interfaces[interfaces_count];
+    u2             fields_count;
+    field_info     fields[fields_count];
+    u2             methods_count;
+    method_info    methods[methods_count];
+    u2             attributes_count;
+    attribute_info attributes[attributes_count];
+}
+*/
+pub struct ClassFile {
+pub mut:
+	minor_version u16
+	major_version u16
+	pool          ConstantPool = ConstantPool{}
+	access_flags  u16
+	this_class    u16
+	super_class   u16
 	interfaces    []u16           = []u16{}
-	fields        []MemberInfo    = []MemberInfo{len: 0}
-	methods       []MemberInfo    = []MemberInfo{len: 0}
-	attributes    []AttributeInfo = []AttributeInfo{len: 0}
+	fields        []MemberInfo    = []MemberInfo{}
+	methods       []MemberInfo    = []MemberInfo{}
+	attributes    []AttributeInfo = []AttributeInfo{}
 }
 
-fn (mut cf ClassFile) read(mut reader ClassReader) {
-	cf.check_magic_number(mut reader)
-	cf.check_version(mut reader)
-	cf.pool = reader.read_constant_info()
-	cf.read_access_flags(mut reader)
-	cf.read_this_class(mut reader)
-	cf.read_super_class(mut reader)
-	cf.read_interface(mut reader)
-	cf.fields = reader.read_members(cf.pool)
-	cf.methods = reader.read_members(cf.pool)
-	cf.attributes = reader.read_attributes(cf.pool)
+pub fn parse_cf(bytecode []u8) !ClassFile {
+	mut reader := ClassReader{bytecode}
+	mut class_file := ClassFile{}
+	class_file.read(mut reader)!
+	return class_file
 }
 
-fn (cf &ClassFile) check_magic_number(mut reader ClassReader) {
+fn (mut cf ClassFile) read(mut reader ClassReader) ! {
+	cf.check_magic_number(mut reader)!
+	cf.check_version(mut reader)!
+	cf.pool = reader.read_constant_pool()!
+	cf.access_flags = reader.read_u16()
+	cf.this_class = reader.read_u16()
+	cf.super_class = reader.read_u16()
+	cf.interfaces = reader.read_u16_array()
+	cf.fields = reader.read_members(cf.pool)!
+	cf.methods = reader.read_members(cf.pool)!
+	cf.attributes = reader.read_attributes(cf.pool)!
+}
+
+fn (cf &ClassFile) check_magic_number(mut reader ClassReader) ! {
 	magic := reader.read_u32()
 	if magic != 0xCAFEBABE {
-		panic('java.lang.ClassFormatError: Invlaid magic number.')
+		return error('java.lang.ClassFormatError: Invlaid magic number.')
 	}
 }
 
-fn (mut cf ClassFile) check_version(mut reader ClassReader) {
+fn (mut cf ClassFile) check_version(mut reader ClassReader) ! {
 	cf.minor_version = reader.read_u16()
 	cf.major_version = reader.read_u16()
 
@@ -42,27 +70,12 @@ fn (mut cf ClassFile) check_version(mut reader ClassReader) {
 			return
 		}
 		46...52 {
-			if self.minor_version == 0 {
+			if cf.minor_version == 0 {
 				return
 			}
 		}
+		else {}
 	}
 
-	panic('java.lang.UnsupportedClassVersionError: Unsupported class version $cf.major_version')
-}
-
-fn (mut cf ClassFile) read_access_flags(mut reader ClassReader) {
-	cf.access_flags = reader.read_u16()
-}
-
-fn (mut cf ClassFile) read_this_class(mut reader ClassReader) {
-	cf.this_class = reader.read_u16()
-}
-
-fn (mut cf ClassFile) read_super_class(mut reader ClassReader) {
-	cf.super_class = reader.read_u16()
-}
-
-fn (mut cf ClassFile) read_interface(mut reader ClassReader) {
-	cf.interfaces = reader.read_u16_array()
+	return error('java.lang.UnsupportedClassVersionError: Unsupported class version $cf.major_version')
 }

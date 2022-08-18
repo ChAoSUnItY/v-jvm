@@ -8,55 +8,54 @@ mut:
 }
 
 // u1
-pub fn (classfile ClassFile) read_u8() u8 {
-	val := class_data.bytecode[0]
-	classfile.drop(1)
+pub fn (mut reader ClassReader) read_u8() u8 {
+	val := reader.bytecode[0]
+	reader.drop(1)
 	return val
 }
 
 // u2
-pub fn (mut classfile ClassFile) read_u16() u16 {
-	val := big_endian_u16(classfile.bytecode)
-	classfile.drop(2)
+pub fn (mut reader ClassReader) read_u16() u16 {
+	val := big_endian_u16(reader.bytecode)
+	reader.drop(2)
 	return val
 }
 
 // u4
-pub fn (mut classfile ClassFile) read_u32() u32 {
-	val := big_endian_u32(classfile.bytecode)
-	classfile.drop(4)
+pub fn (mut reader ClassReader) read_u32() u32 {
+	val := big_endian_u32(reader.bytecode)
+	reader.drop(4)
 	return val
 }
 
-pub fn (mut classfile ClassFile) read_u64() u64 {
-	val := big_endian_u64(classfile.bytecode)
-	classfile.drop(8)
+pub fn (mut reader ClassReader) read_u64() u64 {
+	val := big_endian_u64(reader.bytecode)
+	reader.drop(8)
 	return val
 }
 
-pub fn (mut classfile ClassFile) read_u8_array() []u8 {
-	len := classfile.read_u8()
-	arr := []u16{len: int(len)}
+pub fn (mut reader ClassReader) read_u8_array(len u32) []u8 {
+	mut arr := []u8{cap: int(len)}
 
-	for i in 0 .. len {
-		arr[i] = classfile.read_u8()
+	for _ in 0 .. len {
+		arr << reader.read_u8()
 	}
 
 	return arr
 }
 
-pub fn (mut classfile ClassFile) read_u16_array() []u16 {
-	len := classfile.read_u16()
-	arr := []u16{len: int(len)}
+pub fn (mut reader ClassReader) read_u16_array() []u16 {
+	len := reader.read_u16()
+	mut arr := []u16{cap: int(len)}
 
-	for i in 0 .. len {
-		arr[i] = classfile.read_u16()
+	for _ in 0 .. len {
+		arr << reader.read_u16()
 	}
 
 	return arr
 }
 
 [inline]
-fn (mut classfile ClassFile) drop(n int) {
-	classfile.bytecode.drop(n)
+fn (mut reader ClassReader) drop(n int) {
+	reader.bytecode.drop(n)
 }

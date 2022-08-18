@@ -1,11 +1,12 @@
 module main
 
 import vjvm
-import vjvm.entry { parse_cp }
+import vjvm.entry { ClassPath, parse_cp }
 import vjvm.cmd { Cmd, parse_cmd }
+import vjvm.classfile { ClassFile, parse_cf }
 
 fn main() {
-	cmd := parse_cmd()?
+	cmd := parse_cmd()!
 
 	match true {
 		cmd.help_flag {
@@ -15,18 +16,26 @@ fn main() {
 			println(vjvm.version)
 		}
 		else {
-			start_jvm(&cmd)?
+			start_jvm(&cmd)!
 		}
 	}
 
 	gc_check_leaks()
 }
 
-fn start_jvm(cmd &Cmd) ? {
-	cp := parse_cp(cmd.x_jre_option, cmd.cp_option)?
+fn start_jvm(cmd &Cmd) ! {
+	cp := parse_cp(cmd.x_jre_option, cmd.cp_option)!
 	class_name := cmd.class_name.replace('.', '/')
-	class_data, _ := cp.read_class(class_name) or {
-		return error('Unable to find or load main class $cmd.class_name')
-	}
-	println(class_data)
+	class_file := load_class(class_name, &cp)!
+	print_class_info(&class_file)
+}
+
+fn load_class(class_name string, cp &ClassPath) !ClassFile {
+	class_data, _ := cp.read_class(class_name)!
+	class_file := parse_cf(class_data)!
+	return class_file
+}
+
+fn print_class_info(cf &ClassFile) {
+	println('version: $cf.major_version, $cf.minor_version')
 }
