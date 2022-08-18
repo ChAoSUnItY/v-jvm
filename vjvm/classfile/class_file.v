@@ -3,22 +3,34 @@ module classfile
 struct ClassFile {
 	minor_version u16 = 0
 	major_version u16 = 0
-	constant_pool ConstantPool = []ConstantInfo{len: 0}
-	access_flags  u16   = 0
-	this_class    u16   = 0
-	super_class   u16   = 0
-	interfaces    []u16 = []u16{}
-	fields        []&MemberInfo   = []&MemberInfo{len: 0}
-	methods       []&MemberInfo   = []&MemberInfo{len: 0}
+	pool          ConstantPool = []ConstantInfo{len: 0}
+	access_flags  u16             = 0
+	this_class    u16             = 0
+	super_class   u16             = 0
+	interfaces    []u16           = []u16{}
+	fields        []MemberInfo    = []MemberInfo{len: 0}
+	methods       []MemberInfo    = []MemberInfo{len: 0}
 	attributes    []AttributeInfo = []AttributeInfo{len: 0}
 }
 
-fn (mut reader ClassReader) check_magic_number() ClassFile {
+fn (mut cf ClassFile) read(mut reader ClassReader) {
+	cf.check_magic_number(mut reader)
+	cf.check_version(mut reader)
+	cf.pool = reader.read_constant_info()
+	cf.read_access_flags(mut reader)
+	cf.read_this_class(mut reader)
+	cf.read_super_class(mut reader)
+	cf.read_interface(mut reader)
+	cf.fields = reader.read_members(cf.pool)
+	cf.methods = reader.read_members(cf.pool)
+	cf.attributes = reader.read_attributes(cf.pool)
+}
+
+fn (cf &ClassFile) check_magic_number(mut reader ClassReader) {
 	magic := reader.read_u32()
 	if magic != 0xCAFEBABE {
 		panic('java.lang.ClassFormatError: Invlaid magic number.')
 	}
-	return ClassFile{}
 }
 
 fn (mut cf ClassFile) check_version(mut reader ClassReader) {
@@ -43,11 +55,11 @@ fn (mut cf ClassFile) read_access_flags(mut reader ClassReader) {
 	cf.access_flags = reader.read_u16()
 }
 
-fn (mut cf ClassFile) read_this_flags(mut reader ClassReader) {
+fn (mut cf ClassFile) read_this_class(mut reader ClassReader) {
 	cf.this_class = reader.read_u16()
 }
 
-fn (mut cf ClassFile) read_super_flags(mut reader ClassReader) {
+fn (mut cf ClassFile) read_super_class(mut reader ClassReader) {
 	cf.super_class = reader.read_u16()
 }
 
