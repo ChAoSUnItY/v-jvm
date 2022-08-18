@@ -432,6 +432,27 @@ fn (mut reader ClassReader) read_exception_table() []ExceptionTableEntry {
 }
 
 /*
+Signature_attribute {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 signature_index;
+}
+*/
+struct SignatureAttribute {
+	pool &ConstantPool [required]
+mut:
+	signature_index u16
+}
+
+fn (mut attr SignatureAttribute) read_info(mut reader ClassReader) ! {
+	attr.signature_index = reader.read_u16()
+}
+
+fn (attr &SignatureAttribute) signature() !string {
+	return attr.pool.get_utf8(attr.signature_index)!
+}
+
+/*
 attribute_info {
     u2 attribute_name_index;
     u4 attribute_length;
