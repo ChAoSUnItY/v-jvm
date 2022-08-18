@@ -49,6 +49,12 @@ fn new_attribute_info(attr_name string, attr_len u32, pool &ConstantPool) Attrib
 		'ConstantValue' {
 			AttributeInfo(ConstantValueAttribute{})
 		}
+		'LineNumberTable' {
+			AttributeInfo(LineNumberTableAttribute{})
+		}
+		'LocalVariableTable' {
+			AttributeInfo(LocalVariableTableAttribute{})
+		}
 		'SourceFile' {
 			AttributeInfo(SourceFileAttribute{
 				pool: pool
@@ -126,7 +132,7 @@ mut:
 
 fn (mut attr BootstrapMethodsAttribute) read_info(mut reader ClassReader) ! {
 	len := reader.read_u16()
-	attr.bootstrap_methods = []BootstrapMethod{cap:len}
+	attr.bootstrap_methods = []BootstrapMethod{cap: int(len)}
 
 	for _ in 0 .. len {
 		method_ref := reader.read_u16()
@@ -137,7 +143,129 @@ fn (mut attr BootstrapMethodsAttribute) read_info(mut reader ClassReader) ! {
 
 struct BootstrapMethod {
 	bootstrap_method_ref u16
-	bootstrap_arguments []u16
+	bootstrap_arguments  []u16
+}
+
+/*
+LineNumberTable_attribute {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 line_number_table_length;
+    {   u2 start_pc;
+        u2 line_number;
+    } line_number_table[line_number_table_length];
+}
+*/
+struct LineNumberTableAttribute {
+mut:
+	line_number_table []LineNumberTableEntry = []LineNumberTableEntry{}
+}
+
+fn (mut attr LineNumberTableAttribute) read_info(mut reader ClassReader) ! {
+	len := reader.read_u16()
+	attr.line_number_table = []LineNumberTableEntry{cap: int(len)}
+
+	for _ in 0 .. len {
+		start_pc := reader.read_u16()
+		line_number := reader.read_u16()
+		attr.line_number_table << LineNumberTableEntry{start_pc, line_number}
+	}
+}
+
+fn (attr &LineNumberTableAttribute) get_line_number(pc int) int {
+	for i := attr.line_number_table.len - 1; i >= 0; i-- {
+		entry := attr.line_number_table[i]
+
+		if pc >= entry.start_pc {
+			return entry.start_pc
+		}
+	}
+	return -1
+}
+
+struct LineNumberTableEntry {
+	start_pc    u16
+	line_number u16
+}
+
+/*
+LocalVariableTable_attribute {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 local_variable_table_length;
+    {   u2 start_pc;
+        u2 length;
+        u2 name_index;
+        u2 descriptor_index;
+        u2 index;
+    } local_variable_table[local_variable_table_length];
+}
+*/
+struct LocalVariableTableAttribute {
+mut:
+	local_variable_table []LocalVariableTableEntry = []LocalVariableTableEntry{}
+}
+
+fn (mut attr LocalVariableTableAttribute) read_info(mut reader ClassReader) ! {
+	len := reader.read_u16()
+	attr.local_variable_table = []LocalVariableTableEntry{cap: int(len)}
+
+	for _ in 0 .. len {
+		start_pc := reader.read_u16()
+		length := reader.read_u16()
+		name_index := reader.read_u16()
+		descriptor_index := reader.read_u16()
+		index := reader.read_u16()
+		attr.local_variable_table << LocalVariableTableEntry{start_pc, length, name_index, signature_index, index}
+	}
+}
+
+struct LocalVariableTableEntry {
+	start_pc        u16
+	length          u16
+	name_index      u16
+	descriptor_index u16
+	index           u16
+}
+
+/*
+LocalVariableTypeTable_attribute {
+    u2 attribute_name_index;
+    u4 attribute_length;
+    u2 local_variable_type_table_length;
+    {   u2 start_pc;
+        u2 length;
+        u2 name_index;
+        u2 signature_index;
+        u2 index;
+    } local_variable_type_table[local_variable_type_table_length];
+}
+*/
+struct LocalVariableTypeTableAttribute {
+mut:
+	local_variable_type_table []LocalVariableTypeTableEntry = []LocalVariableTypeTableEntry{}
+}
+
+fn (mut attr LocalVariableTypeTableAttribute) read_info(mut reader ClassReader) ! {
+	len := reader.read_u16()
+	attr.local_variable_type_table = []LocalVariableTypeTableEntry{cap: int(len)}
+
+	for _ in 0 .. len {
+		start_pc := reader.read_u16()
+		length := reader.read_u16()
+		name_index := reader.read_u16()
+		signature_index := reader.read_u16()
+		index := reader.read_u16()
+		attr.local_variable_type_table << LocalVariableTypeTableEntry{start_pc, length, name_index, signature_index, index}
+	}
+}
+
+struct LocalVariableTypeTableEntry {
+	start_pc        u16
+	length          u16
+	name_index      u16
+	signature_index u16
+	index           u16
 }
 
 /*
