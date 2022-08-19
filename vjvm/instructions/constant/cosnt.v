@@ -20,3 +20,12 @@ fn (mut inst DCONST_0) execute(mut frame Frame) {
 	mut stack := frame.opreand_stack()
 	stack.push<f64>(0)
 }
+
+struct DCONST_1 {
+	NoOperandInstruction
+}
+
+fn (mut inst DCONST_1) execute(mut frame Frame) {
+	mut stack := frame.opreand_stack()
+	stack.push<f64>(1)
+}
