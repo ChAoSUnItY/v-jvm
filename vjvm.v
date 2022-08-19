@@ -5,6 +5,7 @@ import vjvm.entry { ClassPath, parse_cp }
 import vjvm.cmd { Cmd, parse_cmd }
 import vjvm.classfile { ClassFile, parse_cf }
 import vjvm.rtda
+import vjvm.instructions
 
 fn main() {
 	cmd := parse_cmd()!

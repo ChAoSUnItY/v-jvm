@@ -12,7 +12,7 @@ fn new_thread() Thread {
 	}
 }
 
-fn (thread &Thread) pc() int {
+pub fn (thread &Thread) pc() int {
 	return thread.pc
 }
 

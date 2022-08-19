@@ -1,5 +1,5 @@
 module rtda
 
-struct Object {
+pub struct Object {
 	// TODO
 }

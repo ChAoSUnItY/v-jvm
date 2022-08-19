@@ -1,7 +1,7 @@
 module rtda
 
 [heap]
-struct Frame {
+pub struct Frame {
 mut:
 	local_vars    LocalVars
 	opreand_stack &OperandStack
@@ -16,10 +16,10 @@ fn new_frame(max_locals u32, max_stack u32) &Frame {
 	}
 }
 
-fn (frame &Frame) local_vars() LocalVars {
+pub fn (frame &Frame) local_vars() LocalVars {
 	return frame.local_vars
 }
 
-fn (frame &Frame) opreand_stack() &OperandStack {
+pub fn (frame &Frame) opreand_stack() &OperandStack {
 	return frame.opreand_stack
 }

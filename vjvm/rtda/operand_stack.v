@@ -16,42 +16,47 @@ fn new_operand_stack(max_size u32) &OperandStack {
 	}
 }
 
-fn (mut stack OperandStack) push<T>(val T) {
+pub fn (mut stack OperandStack) push<T>(val T) {
 	$if T is Object {
-		local[stack.size].ref = val
+		stack.slots[stack.size].ref = val
 		stack.size++
 	} $else $if T is int {
-		local[stack.size].num = val
+		stack.slots[stack.size].num = val
 		stack.size++
 	} $else $if T is f32 {
-		local[stack.size].num = int(f32_bits(val))
+		stack.slots[stack.size].num = int(f32_bits(val))
 		stack.size++
 	} $else $if T is i64 {
-		local[stack.size].num = int(val)
-		local[stack.size + 1].num = int(val >> 32)
+		stack.slots[stack.size].num = int(val)
+		stack.slots[stack.size + 1].num = int(i64(val) >> 32)
 		stack.size += 2
 	} $else $if T is f32 {
 		bits := i64(f32_bits(val))
-		local.set(bits)
+		stack.push(bits)
 	} $else $if T is f64 {
 		bits := i64(f64_bits(val))
-		local.set(bits)
+		stack.push(bits)
 	}
 }
 
-fn (mut stack OperandStack) pop<T>() !T {
+pub fn (mut stack OperandStack) push_nil() {
+	stack.slots[stack.size].ref = unsafe { nil }
+	stack.size++
+}
+
+pub fn (mut stack OperandStack) pop<T>() !T {
 	return $if T is Object {
 		stack.size--
-		local[stack.size + 1].ref
+		stack.slots[stack.size + 1].ref
 	} $else $if T is int {
 		stack.size--
-		local[stack.size + 1].num
+		stack.slots[stack.size + 1].num
 	} $else $if T is f32 {
 		stack.size--
 		f32_from_bits(local[stack.size + 1].num)
 	} $else $if T is i64 {
-		low := local[stack.size].num
-		high := local[stack.size - 1].num
+		low := stack.slots[stack.size].num
+		high := stack.slots[stack.size - 1].num
 		stack.size -= 2
 		i64(high) << 32 | i64(low)
 	} $else $if T is f32 {

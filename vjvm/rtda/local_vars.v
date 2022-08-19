@@ -15,7 +15,7 @@ fn new_local_vars(max_locals u32) &LocalVars {
 	}
 }
 
-fn (mut local LocalVars) set<T>(index int, val T) {
+pub fn (mut local LocalVars) set<T>(index int, val T) {
 	$if T is Object {
 		local.slots[index].ref = val
 	} $else $if T is int {
@@ -34,7 +34,7 @@ fn (mut local LocalVars) set<T>(index int, val T) {
 	}
 }
 
-fn (mut local LocalVars) get<T>(index int) !T {
+pub fn (mut local LocalVars) get<T>(index int) !T {
 	return $if T is Object {
 		local.slots[index].ref
 	} $else $if T is int {
