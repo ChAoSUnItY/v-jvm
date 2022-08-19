@@ -2,7 +2,7 @@
 
 all: java_classes/Main.class
 	v fmt . -w
-	v -o vjvm.exe -gc boehm_leak -keepc vjvm.v
+	v -cg -o vjvm.exe -gc boehm_leak -keepc vjvm.v
 	vjvm.exe --Xjre "C:\Program Files\Java\jre1.8.0_202" --cp java_classes Main
 
 java_classes/Main.class: java_classes/Main.java
