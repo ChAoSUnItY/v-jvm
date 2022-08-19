@@ -114,7 +114,7 @@ fn (mut info ConstantClassInfo) read_info(mut reader ClassReader) ! {
 }
 
 fn (info &ConstantClassInfo) class_name() !string {
-	return info.pool.get_utf8(info.name_index)!
+	return info.pool.get_utf8(info.name_index)
 }
 
 /*
@@ -210,11 +210,11 @@ fn (mut info ConstantClassMemberRefInfo) read_info(mut reader ClassReader) ! {
 }
 
 fn (info &ConstantClassMemberRefInfo) class_name() !string {
-	return info.pool.get_class_name(info.class_index)!
+	return info.pool.get_class_name(info.class_index)
 }
 
 fn (info &ConstantClassMemberRefInfo) name_and_descriptor() !(string, string) {
-	return info.pool.get_name_and_type(info.name_and_type_index)!
+	return info.pool.get_name_and_type(info.name_and_type_index)
 }
 
 /*
