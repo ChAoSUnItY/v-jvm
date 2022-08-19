@@ -425,5 +425,5 @@ fn decode_mutf8(segment []byte) !string {
 
 	char_arr.trim(c_index)
 	runes := char_arr.map(rune(it))
-	return runes.str()
+	return runes.string()
 }
