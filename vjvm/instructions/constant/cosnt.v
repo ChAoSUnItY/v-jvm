@@ -29,3 +29,21 @@ fn (mut inst DCONST_1) execute(mut frame Frame) {
 	mut stack := frame.opreand_stack()
 	stack.push<f64>(1)
 }
+
+struct FCONST_0 {
+	NoOperandInstruction
+}
+
+fn (mut inst FCONST_0) execute(mut frame Frame) {
+	mut stack := frame.opreand_stack()
+	stack.push<f32>(0)
+}
+
+struct FCONST_1 {
+	NoOperandInstruction
+}
+
+fn (mut inst FCONST_1) execute(mut frame Frame) {
+	mut stack := frame.opreand_stack()
+	stack.push<f32>(1)
+}
