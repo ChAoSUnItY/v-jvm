@@ -64,7 +64,7 @@ fn (pool &ConstantPool) get_class_name(index u16) !string {
 fn (pool &ConstantPool) get_utf8(index u16) !string {
 	info := pool.get_constant_info(index)
 	if info is ConstantUtf8Info {
-		return info.str()
+		return info.str().after('&') // temporary workaround
 	} else {
 		return error('Constant pool index $index is not constant info Class')
 	}
