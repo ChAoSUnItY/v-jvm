@@ -86,6 +86,6 @@ pub fn (stack &OperandStack) top() Slot {
 }
 
 [inline]
-pub fn (stack &OperandStack) peek(offset int) Slot {
+pub fn (stack &OperandStack) peek(offset u32) Slot {
 	return stack.slots[stack.size - offset - 1]
 }
