@@ -1,7 +1,7 @@
 module constant
 
 import vjvm.rtda { Frame }
-import vjvm.instructions.base { NoOperandInstruction }
+import vjvm.instruction.base { NoOperandInstruction }
 
 pub struct ACONST_NULL {
 	NoOperandInstruction

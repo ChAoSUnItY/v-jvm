@@ -1,6 +1,6 @@
 module base
 
-struct BytecodeReader {
+pub struct BytecodeReader {
 mut:
 	bytecode []u8
 	pc       int
