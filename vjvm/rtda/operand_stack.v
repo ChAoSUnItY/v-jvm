@@ -36,6 +36,9 @@ pub fn (mut stack OperandStack) push<T>(val T) {
 	} $else $if T is f64 {
 		bits := i64(f64_bits(val))
 		stack.push(bits)
+	} $else $if T is Slot {
+		stack.slots[stack.size] = val
+		stack.size++
 	}
 }
 
@@ -47,22 +50,31 @@ pub fn (mut stack OperandStack) push_nil() {
 pub fn (mut stack OperandStack) pop<T>() !T {
 	$if T is Object {
 		stack.size--
-		return *stack.slots[stack.size + 1].ref
+		return *stack.slots[stack.size].ref
 	} $else $if T is int {
 		stack.size--
-		return stack.slots[stack.size + 1].num
+		return stack.slots[stack.size].num
 	} $else $if T is f32 {
 		stack.size--
-		return f32_from_bits(local[stack.size + 1].num)
+		return f32_from_bits(u32(stack.slots[stack.size].num))
 	} $else $if T is i64 {
 		low := stack.slots[stack.size].num
 		high := stack.slots[stack.size - 1].num
 		stack.size -= 2
 		return i64(high) << 32 | i64(low)
 	} $else $if T is f32 {
-		return f32_from_bits(u32(stack.pop<int>()))
+		stack.size--
+		val := stack.slots[stack.size].num
+		return f32_from_bits(u32(val))
 	} $else $if T is f64 {
-		return f64_from_bits(u64(stack.pop<i64>()))
+		low := stack.slots[stack.size].num
+		high := stack.slots[stack.size - 1].num
+		val := i64(high) << 32 | i64(low)
+		stack.size -= 2
+		return f64_from_bits(u64(val))
+	} $else $if T is Slot {
+		stack.size--
+		return stack.slots[stack.size]
 	} $else {
 		return error('$T.name is not a valid slot item')
 	}

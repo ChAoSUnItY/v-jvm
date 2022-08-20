@@ -27,10 +27,10 @@ pub fn (mut local LocalVars) set<T>(val T, index int) {
 		local.slots[index + 1].num = int(val >> 32)
 	} $else $if T is f32 {
 		bits := i64(f32_bits(val))
-		local.set(bits)
+		local.set(bits, index)
 	} $else $if T is f64 {
 		bits := i64(f64_bits(val))
-		local.set(bits)
+		local.set(bits, index)
 	}
 }
 
