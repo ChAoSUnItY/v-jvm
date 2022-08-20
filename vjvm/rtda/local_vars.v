@@ -1,6 +1,6 @@
 module rtda
 
-import math { f32_bits, f64_bits, f64_bits, f64_from_bits }
+import math { f32_bits, f32_from_bits, f64_bits, f64_from_bits }
 
 struct LocalVars {
 mut:
@@ -35,21 +35,24 @@ pub fn (mut local LocalVars) set<T>(val T, index int) {
 }
 
 pub fn (local LocalVars) get<T>(index int) !T {
-	return $if T is Object {
-		local.slots[index].ref
+	$if T is Object {
+		return *local.slots[index].ref
 	} $else $if T is int {
-		local.slots[index].num
+		return local.slots[index].num
 	} $else $if T is f32 {
-		f32_from_bits(u32(local.slots[index].num))
+		return f32_from_bits(u32(local.slots[index].num))
 	} $else $if T is i64 {
 		low := local.slots[index].num
 		high := local.slots[index - 1].num
-		i64(high) << 32 | i64(low)
+		return i64(high) << 32 | i64(low)
 	} $else $if T is f32 {
-		f32_from_bits(u32(local.slots[index].num))
+		return f32_from_bits(u32(local.slots[index].num))
 	} $else $if T is f64 {
-		f64_from_bits(u64(local.get<i64>(index)))
+		low := local.slots[index].num
+		high := local.slots[index - 1].num
+		bits := i64(high) << 32 | i64(low) // Workaround, see vlang issue #15475
+		return f64_from_bits(u64(bits))
 	} $else {
-		error('$T.name is not a valid Slot item')
+		return error('$T.name is not a valid Slot item')
 	}
 }
