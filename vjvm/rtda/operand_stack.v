@@ -2,7 +2,7 @@ module rtda
 
 import math { f32_bits, f32_from_bits, f64_bits, f64_from_bits }
 
-struct OperandStack {
+pub struct OperandStack {
 mut:
 	size  u32
 	slots []Slot
