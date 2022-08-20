@@ -1,6 +1,6 @@
 module store
 
-import vjvm.rtda { Frame, Object }
+import vjvm.rtda { Frame }
 import vjvm.instruction.base { Index8Instruction, NoOperandInstruction }
 
 pub struct FSTORE {
