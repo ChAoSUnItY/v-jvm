@@ -79,3 +79,13 @@ pub fn (mut stack OperandStack) pop<T>() !T {
 		return error('$T.name is not a valid slot item')
 	}
 }
+
+[inline]
+pub fn (stack &OperandStack) top() Slot {
+	return stack.peek(0)
+}
+
+[inline]
+pub fn (stack &OperandStack) peek(offset int) Slot {
+	return stack.slots[stack.size - offset - 1]
+}
