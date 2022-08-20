@@ -1,6 +1,6 @@
 module rtda
 
-struct Slot {
+pub struct Slot {
 mut:
 	num int
 	ref &Object
