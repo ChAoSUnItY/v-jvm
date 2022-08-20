@@ -5,7 +5,7 @@ import vjvm.rtda { Frame }
 interface Instruction {
 mut:
 	fetch_operands(mut BytecodeReader)
-	execute(mut Frame)
+	execute(mut Frame) !
 }
 
 pub struct NoOperandInstruction {}

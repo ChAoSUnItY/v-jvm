@@ -12,7 +12,7 @@ pub fn (mut inst BIPUSH) fetch_operands(mut reader BytecodeReader) {
 	inst.val = reader.read_i8()
 }
 
-pub fn (mut inst BIPUSH) execute(mut frame Frame) {
+pub fn (mut inst BIPUSH) execute(mut frame Frame) ! {
 	mut stack := frame.opreand_stack()
 	stack.push<int>(inst.val)
 }
@@ -26,7 +26,7 @@ pub fn (mut inst SIPUSH) fetch_operands(mut reader BytecodeReader) {
 	inst.val = reader.read_i16()
 }
 
-pub fn (mut inst SIPUSH) execute(mut frame Frame) {
+pub fn (mut inst SIPUSH) execute(mut frame Frame) ! {
 	mut stack := frame.opreand_stack()
 	stack.push<int>(inst.val)
 }

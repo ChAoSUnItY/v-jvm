@@ -7,4 +7,4 @@ pub struct NOP {
 	NoOperandInstruction
 }
 
-pub fn (mut inst NOP) execute(mut frame Frame) {}
+pub fn (mut inst NOP) execute(mut frame Frame) ! {}
