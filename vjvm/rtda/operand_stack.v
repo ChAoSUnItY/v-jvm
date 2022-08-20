@@ -18,7 +18,7 @@ fn new_operand_stack(max_size u32) &OperandStack {
 
 pub fn (mut stack OperandStack) push<T>(val T) {
 	$if T is Object {
-		stack.slots[stack.size].ref = val
+		stack.slots[stack.size].ref = &val
 		stack.size++
 	} $else $if T is int {
 		stack.slots[stack.size].num = val
@@ -64,6 +64,6 @@ pub fn (mut stack OperandStack) pop<T>() !T {
 	} $else $if T is f64 {
 		f64_from_bits(u64(stack.pop<i64>()))
 	} $else {
-		return error('$T is not a valid slot item')
+		error('$T.name is not a valid slot item')
 	}
 }

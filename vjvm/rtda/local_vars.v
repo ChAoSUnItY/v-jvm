@@ -15,9 +15,9 @@ fn new_local_vars(max_locals u32) &LocalVars {
 	}
 }
 
-pub fn (mut local LocalVars) set<T>(index int, val T) {
+pub fn (mut local LocalVars) set<T>(val T, index int) {
 	$if T is Object {
-		local.slots[index].ref = val
+		local.slots[index].ref = &val
 	} $else $if T is int {
 		local.slots[index].num = val
 	} $else $if T is f32 {
@@ -34,22 +34,22 @@ pub fn (mut local LocalVars) set<T>(index int, val T) {
 	}
 }
 
-pub fn (mut local LocalVars) get<T>(index int) !T {
+pub fn (local LocalVars) get<T>(index int) !T {
 	return $if T is Object {
 		local.slots[index].ref
 	} $else $if T is int {
 		local.slots[index].num
 	} $else $if T is f32 {
-		f32_from_bits(u32(local[index].num))
+		f32_from_bits(u32(local.slots[index].num))
 	} $else $if T is i64 {
-		low := local[stack.size].num
-		high := local[stack.size - 1].num
+		low := local.slots[index].num
+		high := local.slots[index - 1].num
 		i64(high) << 32 | i64(low)
 	} $else $if T is f32 {
-		f32_from_bits(u32(stack.pop<int>()))
+		f32_from_bits(u32(local.slots[index].num))
 	} $else $if T is f64 {
-		f64_from_bits(u64(stack.pop<i64>()))
+		f64_from_bits(u64(local.get<i64>(index)))
 	} $else {
-		error('$T is not a valid Slot item')
+		error('$T.name is not a valid Slot item')
 	}
 }
