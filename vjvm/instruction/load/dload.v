@@ -1,14 +1,14 @@
 module load
 
 import vjvm.rtda { Frame }
-import vjvm.instruction.load { Index8Instruction, NoOperandInstruction }
+import vjvm.instruction.base { Index8Instruction, NoOperandInstruction }
 
 pub struct DLOAD {
 	Index8Instruction
 }
 
 pub fn (mut inst DLOAD) execute(mut frame Frame) ! {
-	dload(mut frame, inst.index)!
+	load<f64>(mut frame, inst.index)!
 }
 
 pub struct DLOAD_0 {
@@ -16,7 +16,7 @@ pub struct DLOAD_0 {
 }
 
 pub fn (mut inst DLOAD_0) execute(mut frame Frame) ! {
-	dload(mut frame, 0)
+	load<f64>(mut frame, 0)!
 }
 
 pub struct DLOAD_1 {
@@ -24,7 +24,7 @@ pub struct DLOAD_1 {
 }
 
 pub fn (mut inst DLOAD_1) execute(mut frame Frame) ! {
-	dload(mut frame, 1)
+	load<f64>(mut frame, 1)!
 }
 
 pub struct DLOAD_2 {
@@ -32,7 +32,7 @@ pub struct DLOAD_2 {
 }
 
 pub fn (mut inst DLOAD_2) execute(mut frame Frame) ! {
-	dload(mut frame, 2)
+	load<f64>(mut frame, 2)!
 }
 
 pub struct DLOAD_3 {
@@ -40,11 +40,5 @@ pub struct DLOAD_3 {
 }
 
 pub fn (mut inst DLOAD_3) execute(mut frame Frame) ! {
-	dload(mut frame, 3)
-}
-
-fn dload(mut frame Frame, index u32) ! {
-	val := frame.local_vars().get<f64>(index)!
-	mut stack := frame.opreand_stack()
-	stack.push<f64>(val)
+	load<f64>(mut frame, 3)!
 }
