@@ -22,7 +22,7 @@ fn (mut stack Stack) push(mut frame Frame) ! {
 		frame.lower = stack.top
 	}
 
-	stack.top = frame
+	stack.top = unsafe { frame }
 	stack.size++
 }
 

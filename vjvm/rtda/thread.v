@@ -31,3 +31,7 @@ fn (mut thread Thread) pop_frame() !&Frame {
 fn (thread &Thread) current_frame() !&Frame {
 	return thread.stack.peek()!
 }
+
+fn (thread &Thread) new_frame(max_locals u32, max_stack u32) &Frame {
+	return new_frame(thread, max_locals, max_stack)
+}
