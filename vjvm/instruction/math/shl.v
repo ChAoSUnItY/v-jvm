@@ -9,7 +9,7 @@ pub struct ISHL {
 
 pub fn (mut inst ISHL) execute(mut frame Frame) ! {
 	mut stack := frame.opreand_stack()
-	val1, val2 := pop2<int>(mut stack)!
+	val1, val2 := stack.pop2<int>()!
 	stack.push<int>(val1 << val2)
 }
 
@@ -19,6 +19,6 @@ pub struct LSHL {
 
 pub fn (mut inst LSHL) execute(mut frame Frame) ! {
 	mut stack := frame.opreand_stack()
-	val1, val2 := pop2<i64>(mut stack)!
+	val1, val2 := stack.pop2<i64>()!
 	stack.push<i64>(val1 << val2)
 }

@@ -9,7 +9,7 @@ pub struct DADD {
 
 pub fn (mut inst DADD) execute(mut frame Frame) ! {
 	mut stack := frame.opreand_stack()
-	val1, val2 := pop2<f64>(mut stack)!
+	val1, val2 := stack.pop2<f64>()!
 	stack.push<f64>(val1 + val2)
 }
 
@@ -19,7 +19,7 @@ pub struct FADD {
 
 pub fn (mut inst FADD) execute(mut frame Frame) ! {
 	mut stack := frame.opreand_stack()
-	val1, val2 := pop2<f32>(mut stack)!
+	val1, val2 := stack.pop2<f32>()!
 	stack.push<f32>(val1 + val2)
 }
 
@@ -29,7 +29,7 @@ pub struct IADD {
 
 pub fn (mut inst IADD) execute(mut frame Frame) ! {
 	mut stack := frame.opreand_stack()
-	val1, val2 := pop2<int>(mut stack)!
+	val1, val2 := stack.pop2<int>()!
 	stack.push<int>(val1 + val2)
 }
 
@@ -39,6 +39,6 @@ pub struct LADD {
 
 pub fn (mut inst LADD) execute(mut frame Frame) ! {
 	mut stack := frame.opreand_stack()
-	val1, val2 := pop2<i64>(mut stack)!
+	val1, val2 := stack.pop2<i64>()!
 	stack.push<i64>(val1 + val2)
 }

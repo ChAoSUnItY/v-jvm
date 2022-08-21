@@ -71,6 +71,12 @@ pub fn (mut stack OperandStack) pop<T>() !T {
 	}
 }
 
+pub fn (mut stack OperandStack) pop2<T>() !(T, T) {
+	val1 := stack.pop<T>()!
+	val2 := stack.pop<T>()!
+	return val2, val1
+}
+
 [inline]
 pub fn (stack &OperandStack) top() Slot {
 	return stack.peek(0)
