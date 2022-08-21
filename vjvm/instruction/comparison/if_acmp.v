@@ -13,11 +13,11 @@ pub fn (mut inst IF_ACMPEQ) execute(mut frame Frame) ! {
 	}
 }
 
-pub struct IF_ACMPEQ {
+pub struct IF_ACMPNE {
 	BranchInstruction
 }
 
-pub fn (mut inst IF_ACMPEQ) execute(mut frame Frame) ! {
+pub fn (mut inst IF_ACMPNE) execute(mut frame Frame) ! {
 	if !acmp(mut frame) {
 		branch(mut frame, inst.offset)
 	}
