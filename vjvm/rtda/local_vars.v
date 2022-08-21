@@ -48,10 +48,7 @@ pub fn (local LocalVars) get<T>(index int) !T {
 	} $else $if T is f32 {
 		return f32_from_bits(u32(local.slots[index].num))
 	} $else $if T is f64 {
-		low := local.slots[index].num
-		high := local.slots[index - 1].num
-		bits := i64(high) << 32 | i64(low) // Workaround, see vlang issue #15475
-		return f64_from_bits(u64(bits))
+		return f64_from_bits(u64(local.get<i64>(index)!))
 	} $else {
 		return error('$T.name is not a valid Slot item')
 	}
