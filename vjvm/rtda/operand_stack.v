@@ -55,23 +55,14 @@ pub fn (mut stack OperandStack) pop<T>() !T {
 		stack.size--
 		return stack.slots[stack.size].num
 	} $else $if T is f32 {
-		stack.size--
-		return f32_from_bits(u32(stack.slots[stack.size].num))
+		return f32_from_bits(u32(stack.pop<int>()!))
 	} $else $if T is i64 {
 		low := stack.slots[stack.size].num
 		high := stack.slots[stack.size - 1].num
 		stack.size -= 2
 		return i64(high) << 32 | i64(low)
-	} $else $if T is f32 {
-		stack.size--
-		val := stack.slots[stack.size].num
-		return f32_from_bits(u32(val))
 	} $else $if T is f64 {
-		low := stack.slots[stack.size].num
-		high := stack.slots[stack.size - 1].num
-		val := i64(high) << 32 | i64(low)
-		stack.size -= 2
-		return f64_from_bits(u64(val))
+		return f64_from_bits(u64(stack.pop<i64>()!))
 	} $else $if T is Slot {
 		stack.size--
 		return stack.slots[stack.size]
