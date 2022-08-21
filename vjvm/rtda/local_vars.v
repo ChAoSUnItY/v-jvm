@@ -2,7 +2,7 @@ module rtda
 
 import math { f32_bits, f32_from_bits, f64_bits, f64_from_bits }
 
-pub struct LocalVars {
+struct LocalVars {
 mut:
 	slots []&Slot
 }
