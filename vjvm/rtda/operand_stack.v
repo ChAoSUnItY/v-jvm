@@ -16,6 +16,7 @@ fn new_operand_stack(max_size u32) &OperandStack {
 	}
 }
 
+[inline]
 pub fn (mut stack OperandStack) push<T>(val T) {
 	$if T is Object {
 		stack.slots[stack.size].ref = &val
@@ -42,11 +43,13 @@ pub fn (mut stack OperandStack) push<T>(val T) {
 	}
 }
 
+[inline]
 pub fn (mut stack OperandStack) push_nil() {
 	stack.slots[stack.size].ref = unsafe { nil }
 	stack.size++
 }
 
+[inline]
 pub fn (mut stack OperandStack) pop<T>() !T {
 	$if T is Object {
 		stack.size--
@@ -71,10 +74,21 @@ pub fn (mut stack OperandStack) pop<T>() !T {
 	}
 }
 
+[inline]
 pub fn (mut stack OperandStack) pop2<T>() !(T, T) {
-	val1 := stack.pop<T>()!
-	val2 := stack.pop<T>()!
-	return val2, val1
+	$if T is i64 || T is f64 {
+		val1_1 := stack.slots[stack.size]
+		val1_2 := stack.slots[stack.size - 1]
+		val2_1 := stack.slots[stack.size - 2]
+		val2_2 := stack.slots[stack.size - 3]
+		stack.size -= 4
+		return val2_1.conv2<T>(val2_2)!, val1_1.conv2<T>(val1_2)!
+	} $else {
+		val1 := stack.slots[stack.size]
+		val2 := stack.slots[stack.size - 1]
+		stack.size -= 2
+		return val2.conv<T>()!, val1.conv<T>()!
+	}
 }
 
 [inline]

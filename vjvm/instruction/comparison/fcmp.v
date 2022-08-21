@@ -15,6 +15,6 @@ pub struct FCMPL {
 	NoOperandInstruction
 }
 
-pub fn (mut inst FCMPG) execute(mut frame Frame) ! {
+pub fn (mut inst FCMPL) execute(mut frame Frame) ! {
 	cmp_l<f32>(mut frame)!
 }
