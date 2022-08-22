@@ -4,12 +4,12 @@ import vjvm.rtda { Frame }
 import vjvm.instruction.base { BytecodeReader }
 
 pub struct IINC {
-mut:
-	index  int
+pub mut:
+	index  u32
 	@const int
 }
 
-pub fn (mut inst IINC) fetch_operands(mut reader BytecodeReader) ! {
+pub fn (mut inst IINC) fetch_operands(mut reader BytecodeReader) {
 	inst.index = reader.read_u8()
 	inst.@const = reader.read_i8()
 }

@@ -2,7 +2,7 @@ module base
 
 import vjvm.rtda { Frame }
 
-interface Instruction {
+pub interface Instruction {
 mut:
 	fetch_operands(mut BytecodeReader)
 	execute(mut Frame) !
@@ -13,7 +13,7 @@ pub struct NoOperandInstruction {}
 fn (mut inst NoOperandInstruction) fetch_operands(mut reader BytecodeReader) {}
 
 pub struct BranchInstruction {
-mut:
+pub mut:
 	offset int
 }
 
@@ -22,8 +22,8 @@ fn (mut inst BranchInstruction) fetch_operands(mut reader BytecodeReader) {
 }
 
 pub struct Index8Instruction {
-mut:
-	index u8
+pub mut:
+	index u32
 }
 
 fn (mut inst Index8Instruction) fetch_operands(mut reader BytecodeReader) {
@@ -31,7 +31,7 @@ fn (mut inst Index8Instruction) fetch_operands(mut reader BytecodeReader) {
 }
 
 pub struct Index16Instruction {
-mut:
+pub mut:
 	index u16
 }
 

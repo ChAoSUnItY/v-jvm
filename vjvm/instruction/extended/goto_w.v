@@ -8,7 +8,7 @@ mut:
 	offset int
 }
 
-pub fn (mut inst GOTO_W) fetch_operands(mut reader BytecodeReader) ! {
+pub fn (mut inst GOTO_W) fetch_operands(mut reader BytecodeReader) {
 	inst.offset = reader.read_int()
 }
 
