@@ -36,5 +36,5 @@ fn cmp_l<T>(mut frame Frame) ! {
 fn acmp(mut frame Frame) !bool {
 	mut stack := frame.opreand_stack()
 	val1, val2 := stack.pop2<Object>()!
-	return charptr(val1) == charptr(val2)
+	return charptr(&val1) == charptr(&val2)
 }
