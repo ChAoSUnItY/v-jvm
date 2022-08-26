@@ -1,15 +1,16 @@
 module instruction
 
 import vjvm.instruction.base
+import vjvm.instruction.comparison { DCMPG, DCMPL, FCMPG, FCMPL, LCMP }
 import vjvm.instruction.constant { ACONST_NULL, DCONST_0, DCONST_1, FCONST_0, FCONST_1, FCONST_2, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5, ICONST_M1, LCONST_0, LCONST_1, NOP }
-import vjvm.instruction.conversion
+import vjvm.instruction.conversion { D2F, D2I, D2L, F2D, F2I, F2L, I2B, I2C, I2D, I2F, I2L, I2S, L2D, L2F, L2I }
 import vjvm.instruction.extended
 import vjvm.instruction.load { ALOAD_0, ALOAD_1, ALOAD_2, ALOAD_3, DLOAD_0, DLOAD_1, DLOAD_2, DLOAD_3, FLOAD_0, FLOAD_1, FLOAD_2, FLOAD_3, ILOAD_0, ILOAD_1, ILOAD_2, ILOAD_3, LLOAD_0, LLOAD_1, LLOAD_2, LLOAD_3 }
-import vjvm.instruction.math
-import vjvm.instruction.stack
-import vjvm.instruction.store
+import vjvm.instruction.math { DADD, DDIV, DMUL, DNEG, DREM, DSUB, FADD, FDIV, FMUL, FNEG, FREM, FSUB, IADD, IAND, IDIV, IMUL, INEG, IOR, IREM, ISHL, ISHR, ISUB, IUSHR, IXOR, LADD, LAND, LDIV, LMUL, LNEG, LOR, LREM, LSHL, LSHR, LSUB, LUSHR, LXOR }
+import vjvm.instruction.stack { DUP, DUP2, DUP2_X1, DUP2_X2, DUP_X1, DUP_X2, POP, POP2, SWAP }
+import vjvm.instruction.store { ASTORE_0, ASTORE_1, ASTORE_2, ASTORE_3, DSTORE_0, DSTORE_1, DSTORE_2, DSTORE_3, FSTORE_0, FSTORE_1, FSTORE_2, FSTORE_3, ISTORE_0, ISTORE_1, ISTORE_2, ISTORE_3, LSTORE_0, LSTORE_1, LSTORE_2, LSTORE_3 }
 
-__global (
+const (
 	nop         = &NOP{}
 	aconst_null = &ACONST_NULL{}
 	iconst_m1   = &ICONST_M1{}
@@ -46,4 +47,116 @@ __global (
 	aload_1     = &ALOAD_1{}
 	aload_2     = &ALOAD_2{}
 	aload_3     = &ALOAD_3{}
+	// iaload      = &IALOAD{}
+	// laload      = &LALOAD{}
+	// faload      = &FALOAD{}
+	// daload      = &DALOAD{}
+	// aaload      = &AALOAD{}
+	// baload      = &BALOAD{}
+	// caload      = &CALOAD{}
+	// saload      = &SALOAD{}
+	istore_0    = &ISTORE_0{}
+	istore_1    = &ISTORE_1{}
+	istore_2    = &ISTORE_2{}
+	istore_3    = &ISTORE_3{}
+	lstore_0    = &LSTORE_0{}
+	lstore_1    = &LSTORE_1{}
+	lstore_2    = &LSTORE_2{}
+	lstore_3    = &LSTORE_3{}
+	fstore_0    = &FSTORE_0{}
+	fstore_1    = &FSTORE_1{}
+	fstore_2    = &FSTORE_2{}
+	fstore_3    = &FSTORE_3{}
+	dstore_0    = &DSTORE_0{}
+	dstore_1    = &DSTORE_1{}
+	dstore_2    = &DSTORE_2{}
+	dstore_3    = &DSTORE_3{}
+	astore_0    = &ASTORE_0{}
+	astore_1    = &ASTORE_1{}
+	astore_2    = &ASTORE_2{}
+	astore_3    = &ASTORE_3{}
+	// iastore  = &IASTORE{}
+	// lastore  = &LASTORE{}
+	// fastore  = &FASTORE{}
+	// dastore  = &DASTORE{}
+	// aastore  = &AASTORE{}
+	// bastore  = &BASTORE{}
+	// castore  = &CASTORE{}
+	// sastore  = &SASTORE{}
+	pop         = &POP{}
+	pop2        = &POP2{}
+	dup         = &DUP{}
+	dup_x1      = &DUP_X1{}
+	dup_x2      = &DUP_X2{}
+	dup2        = &DUP2{}
+	dup2_x1     = &DUP2_X1{}
+	dup2_x2     = &DUP2_X2{}
+	swap        = &SWAP{}
+	iadd        = &IADD{}
+	ladd        = &LADD{}
+	fadd        = &FADD{}
+	dadd        = &DADD{}
+	isub        = &ISUB{}
+	lsub        = &LSUB{}
+	fsub        = &FSUB{}
+	dsub        = &DSUB{}
+	imul        = &IMUL{}
+	lmul        = &LMUL{}
+	fmul        = &FMUL{}
+	dmul        = &DMUL{}
+	idiv        = &IDIV{}
+	ldiv        = &LDIV{}
+	fdiv        = &FDIV{}
+	ddiv        = &DDIV{}
+	irem        = &IREM{}
+	lrem        = &LREM{}
+	frem        = &FREM{}
+	drem        = &DREM{}
+	ineg        = &INEG{}
+	lneg        = &LNEG{}
+	fneg        = &FNEG{}
+	dneg        = &DNEG{}
+	ishl        = &ISHL{}
+	lshl        = &LSHL{}
+	ishr        = &ISHR{}
+	lshr        = &LSHR{}
+	iushr       = &IUSHR{}
+	lushr       = &LUSHR{}
+	iand        = &IAND{}
+	land        = &LAND{}
+	ior         = &IOR{}
+	lor         = &LOR{}
+	ixor        = &IXOR{}
+	lxor        = &LXOR{}
+	i2l         = &I2L{}
+	i2f         = &I2F{}
+	i2d         = &I2D{}
+	l2i         = &L2I{}
+	l2f         = &L2F{}
+	l2d         = &L2D{}
+	f2i         = &F2I{}
+	f2l         = &F2L{}
+	f2d         = &F2D{}
+	d2i         = &D2I{}
+	d2l         = &D2L{}
+	d2f         = &D2F{}
+	i2b         = &I2B{}
+	i2c         = &I2C{}
+	i2s         = &I2S{}
+	lcmp        = &LCMP{}
+	fcmpl       = &FCMPL{}
+	fcmpg       = &FCMPG{}
+	dcmpl       = &DCMPL{}
+	dcmpg       = &DCMPG{}
+		// ireturn = &IRETURN{}
+		// lreturn = &LRETURN{}
+		// freturn = &FRETURN{}
+		// dreturn = &DRETURN{}
+		// areturn = &ARETURN{}
+		// _return = &RETURN{}
+		// arraylength   = &ARRAY_LENGTH{}
+		// athrow        = &ATHROW{}
+		// monitorenter  = &MONITOR_ENTER{}
+		// monitorexit   = &MONITOR_EXIT{}
+		// invoke_native = &INVOKE_NATIVE{}
 )
