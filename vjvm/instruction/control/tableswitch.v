@@ -3,7 +3,7 @@ module control
 import vjvm.rtda { Frame }
 import vjvm.instruction.base { BytecodeReader, branch }
 
-pub struct TABLE_SWTICH {
+pub struct TABLE_SWITCH {
 mut:
 	default_offset int
 	low            int
@@ -11,7 +11,7 @@ mut:
 	jump_offsets   []int = []int{}
 }
 
-pub fn (mut inst TABLE_SWTICH) fetch_operands(mut reader BytecodeReader) ! {
+pub fn (mut inst TABLE_SWITCH) fetch_operands(mut reader BytecodeReader) {
 	reader.skip_padding()
 	inst.default_offset = reader.read_int()
 	inst.low = reader.read_int()
@@ -20,7 +20,7 @@ pub fn (mut inst TABLE_SWTICH) fetch_operands(mut reader BytecodeReader) ! {
 	inst.jump_offsets = reader.read_int_arr(jump_offsets_count)
 }
 
-pub fn (mut inst TABLE_SWTICH) execute(mut frame Frame) ! {
+pub fn (mut inst TABLE_SWITCH) execute(mut frame Frame) ! {
 	mut stack := frame.opreand_stack()
 	index := stack.pop<int>()!
 

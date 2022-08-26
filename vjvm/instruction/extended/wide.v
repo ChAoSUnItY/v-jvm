@@ -1,14 +1,14 @@
 module extended
 
 import vjvm.rtda { Frame }
-import vjvm.instruction.base { BytecodeReader, Instruction }
+import vjvm.instruction.base { BytecodeReader, Instruction, UninitializedInstruction }
 import vjvm.instruction.load { ALOAD, DLOAD, FLOAD, ILOAD, LLOAD }
 import vjvm.instruction.store { ASTORE, DSTORE, FSTORE, ISTORE, LSTORE }
 import vjvm.instruction.math { IINC }
 
 pub struct WIDE {
 mut:
-	modified_instruction &Instruction = unsafe { nil }
+	modified_instruction Instruction = UninitializedInstruction{}
 }
 
 pub fn (mut inst WIDE) fetch_operands(mut reader BytecodeReader) {

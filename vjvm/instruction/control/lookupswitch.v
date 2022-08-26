@@ -10,7 +10,7 @@ mut:
 	match_offsets  []int = []int{}
 }
 
-pub fn (mut inst LOOKUP_SWITCH) fetch_operands(mut reader BytecodeReader) ! {
+pub fn (mut inst LOOKUP_SWITCH) fetch_operands(mut reader BytecodeReader) {
 	reader.skip_padding()
 	inst.default_offset = reader.read_int()
 	inst.n_pairs = reader.read_int()

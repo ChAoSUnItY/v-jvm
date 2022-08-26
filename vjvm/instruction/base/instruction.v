@@ -10,14 +10,14 @@ mut:
 
 pub struct NoOperandInstruction {}
 
-fn (mut inst NoOperandInstruction) fetch_operands(mut reader BytecodeReader) {}
+pub fn (mut inst NoOperandInstruction) fetch_operands(mut reader BytecodeReader) {}
 
 pub struct BranchInstruction {
 pub mut:
 	offset int
 }
 
-fn (mut inst BranchInstruction) fetch_operands(mut reader BytecodeReader) {
+pub fn (mut inst BranchInstruction) fetch_operands(mut reader BytecodeReader) {
 	inst.offset = reader.read_i16()
 }
 
@@ -26,7 +26,7 @@ pub mut:
 	index u32
 }
 
-fn (mut inst Index8Instruction) fetch_operands(mut reader BytecodeReader) {
+pub fn (mut inst Index8Instruction) fetch_operands(mut reader BytecodeReader) {
 	inst.index = reader.read_u8()
 }
 
@@ -35,6 +35,12 @@ pub mut:
 	index u16
 }
 
-fn (mut inst Index16Instruction) fetch_operands(mut reader BytecodeReader) {
+pub fn (mut inst Index16Instruction) fetch_operands(mut reader BytecodeReader) {
 	inst.index = reader.read_u16()
 }
+
+pub struct UninitializedInstruction {}
+
+pub fn (mut inst UninitializedInstruction) fetch_operands(mut reader BytecodeReader) {}
+
+pub fn (mut ints UninitializedInstruction) execute(mut frame Frame) ! {}
