@@ -77,17 +77,16 @@ pub fn (mut stack OperandStack) pop<T>() !T {
 [inline]
 pub fn (mut stack OperandStack) pop2<T>() !(T, T) {
 	$if T is i64 || T is f64 {
-		val1_1 := stack.slots[stack.size - 1]
-		val1_2 := stack.slots[stack.size - 2]
-		val2_1 := stack.slots[stack.size - 3]
-		val2_2 := stack.slots[stack.size - 4]
 		stack.size -= 4
+		val1_1 := stack.slots[stack.size + 3]
+		val1_2 := stack.slots[stack.size + 2]
+		val2_1 := stack.slots[stack.size + 1]
+		val2_2 := stack.slots[stack.size]
 		return val2_1.conv2<T>(val2_2)!, val1_1.conv2<T>(val1_2)!
 	} $else {
-		println(stack.size)
-		val1 := stack.slots[stack.size - 1]
-		val2 := stack.slots[stack.size - 2]
 		stack.size -= 2
+		val1 := stack.slots[stack.size + 1]
+		val2 := stack.slots[stack.size]
 		return val2.conv<T>()!, val1.conv<T>()!
 	}
 }
