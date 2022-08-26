@@ -13,6 +13,16 @@ pub fn (mut inst I2B) execute(mut frame Frame) ! {
 	stack.push<int>(i8(val))
 }
 
+pub struct I2C {
+	NoOperandInstruction
+}
+
+pub fn (mut inst I2C) execute(mut frame Frame) ! {
+	mut stack := frame.opreand_stack()
+	val := stack.pop<int>()!
+	stack.push<int>(u16(val))
+}
+
 pub struct I2S {
 	NoOperandInstruction
 }
