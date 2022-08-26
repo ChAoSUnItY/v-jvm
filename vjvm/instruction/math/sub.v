@@ -8,7 +8,7 @@ pub struct DSUB {
 }
 
 pub fn (mut inst DSUB) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val1, val2 := stack.pop2<f64>()!
 	stack.push<f64>(val1 - val2)
 }
@@ -18,7 +18,7 @@ pub struct FSUB {
 }
 
 pub fn (mut inst FSUB) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val1, val2 := stack.pop2<f32>()!
 	stack.push<f32>(val1 - val2)
 }
@@ -28,7 +28,7 @@ pub struct ISUB {
 }
 
 pub fn (mut inst ISUB) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val1, val2 := stack.pop2<int>()!
 	stack.push<int>(val1 - val2)
 }
@@ -38,7 +38,7 @@ pub struct LSUB {
 }
 
 pub fn (mut inst LSUB) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val1, val2 := stack.pop2<i64>()!
 	stack.push<i64>(val1 - val2)
 }

@@ -9,7 +9,7 @@ mut:
 	next_pc       int
 }
 
-fn new_frame(thread &Thread, max_locals u32, max_stack u32) &Frame {
+pub fn (thread &Thread) new_frame(max_locals u32, max_stack u32) &Frame {
 	return &Frame{
 		local_vars: new_local_vars(max_locals)
 		opreand_stack: new_operand_stack(max_stack)
@@ -22,7 +22,7 @@ pub fn (frame &Frame) local_vars() LocalVars {
 	return frame.local_vars
 }
 
-pub fn (frame &Frame) opreand_stack() &OperandStack {
+pub fn (frame &Frame) operand_stack() &OperandStack {
 	return frame.opreand_stack
 }
 

@@ -9,7 +9,7 @@ pub struct SWAP {
 }
 
 pub fn (mut inst SWAP) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val2 := stack.pop<Slot>()!
 	val1 := stack.pop<Slot>()!
 	stack.push<Slot>(val2)

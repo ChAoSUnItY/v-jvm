@@ -9,7 +9,7 @@ pub struct POP {
 }
 
 pub fn (mut inst POP) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	stack.pop<Slot>()!
 }
 
@@ -19,7 +19,7 @@ pub struct POP2 {
 }
 
 pub fn (mut inst POP2) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	stack.pop<Slot>()!
 	stack.pop<Slot>()!
 }

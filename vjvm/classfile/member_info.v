@@ -1,6 +1,6 @@
 module classfile
 
-struct MemberInfo {
+pub struct MemberInfo {
 	pool             &ConstantPool   [required]
 	access_flags     u16
 	name_index       u16
@@ -41,4 +41,13 @@ pub fn (info &MemberInfo) descriptor() !string {
 
 pub fn (info &MemberInfo) attributes() []AttributeInfo {
 	return info.attributes
+}
+
+pub fn (info &MemberInfo) code_attr() ?&CodeAttribute {
+	for attr in info.attributes {
+		if attr is CodeAttribute {
+			return attr
+		}
+	}
+	return none
 }

@@ -8,7 +8,7 @@ pub struct IFNULL {
 }
 
 pub fn (mut inst IFNULL) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	ref := stack.pop<Object>()!
 	if isnil(&ref) {
 		branch(mut frame, inst.offset)
@@ -20,7 +20,7 @@ pub struct IFNONNULL {
 }
 
 pub fn (mut inst IFNONNULL) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	ref := stack.pop<Object>()!
 	if !isnil(&ref) {
 		branch(mut frame, inst.offset)

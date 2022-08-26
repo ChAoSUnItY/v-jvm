@@ -2,7 +2,7 @@ module base
 
 pub struct BytecodeReader {
 mut:
-	bytecode []u8
+	bytecode []u8 = []u8{}
 	pc       int
 }
 

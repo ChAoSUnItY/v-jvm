@@ -406,6 +406,18 @@ mut:
 	attributes      []AttributeInfo
 }
 
+pub fn (attr &CodeAttribute) max_locals() u16 {
+	return attr.max_locals
+}
+
+pub fn (attr &CodeAttribute) max_stack() u16 {
+	return attr.max_stack
+}
+
+pub fn (attr &CodeAttribute) bytecode() []u8 {
+	return attr.code
+}
+
 struct ExceptionTableEntry {
 	start_pc   u16
 	end_pc     u16

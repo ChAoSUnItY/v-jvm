@@ -9,7 +9,7 @@ pub struct DUP {
 }
 
 pub fn (mut inst DUP) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val := stack.top()
 	stack.push<Slot>(val)
 }
@@ -20,7 +20,7 @@ pub struct DUP_X1 {
 }
 
 pub fn (mut inst DUP_X1) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val2 := stack.pop<Slot>()!
 	val1 := stack.pop<Slot>()!
 	stack.push<Slot>(val2)
@@ -34,7 +34,7 @@ pub struct DUP_X2 {
 }
 
 pub fn (mut inst DUP_X2) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val3 := stack.pop<Slot>()!
 	val2 := stack.pop<Slot>()!
 	val1 := stack.pop<Slot>()!
@@ -50,7 +50,7 @@ pub struct DUP2 {
 }
 
 pub fn (mut inst DUP2) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val2 := stack.peek(0)
 	val1 := stack.peek(1)
 	stack.push<Slot>(val1)
@@ -63,7 +63,7 @@ pub struct DUP2_X1 {
 }
 
 pub fn (mut inst DUP2_X1) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val3 := stack.pop<Slot>()!
 	val2 := stack.pop<Slot>()!
 	val1 := stack.pop<Slot>()!
@@ -80,7 +80,7 @@ pub struct DUP2_X2 {
 }
 
 pub fn (mut inst DUP2_X2) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val4 := stack.pop<Slot>()!
 	val3 := stack.pop<Slot>()!
 	val2 := stack.pop<Slot>()!

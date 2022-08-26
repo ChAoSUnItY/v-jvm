@@ -8,7 +8,7 @@ pub struct IUSHR {
 }
 
 pub fn (mut inst IUSHR) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val1, val2 := stack.pop2<int>()!
 	stack.push<int>(val1 >>> val2)
 }
@@ -18,7 +18,7 @@ pub struct LUSHR {
 }
 
 pub fn (mut inst LUSHR) execute(mut frame Frame) ! {
-	mut stack := frame.opreand_stack()
+	mut stack := frame.operand_stack()
 	val1, val2 := stack.pop2<i64>()!
 	stack.push<i64>(val1 >>> val2)
 }
