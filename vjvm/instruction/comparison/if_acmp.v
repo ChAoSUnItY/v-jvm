@@ -8,7 +8,7 @@ pub struct IF_ACMPEQ {
 }
 
 pub fn (mut inst IF_ACMPEQ) execute(mut frame Frame) ! {
-	if acmp(mut frame) {
+	if acmp(mut frame)! {
 		branch(mut frame, inst.offset)
 	}
 }
@@ -18,7 +18,7 @@ pub struct IF_ACMPNE {
 }
 
 pub fn (mut inst IF_ACMPNE) execute(mut frame Frame) ! {
-	if !acmp(mut frame) {
+	if !acmp(mut frame)! {
 		branch(mut frame, inst.offset)
 	}
 }
