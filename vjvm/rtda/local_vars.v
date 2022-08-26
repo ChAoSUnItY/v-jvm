@@ -4,12 +4,12 @@ import math { f32_bits, f32_from_bits, f64_bits, f64_from_bits }
 
 struct LocalVars {
 mut:
-	slots []&Slot
+	slots []Slot
 }
 
 fn new_local_vars(max_locals u32) &LocalVars {
 	return if max_locals > 0 {
-		&LocalVars{unsafe { []&Slot{len: int(max_locals), init: nil} }}
+		&LocalVars{[]Slot{len: int(max_locals), init: Slot{0, unsafe { nil }}}}
 	} else {
 		unsafe { nil }
 	}
