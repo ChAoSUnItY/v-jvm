@@ -43,4 +43,6 @@ pub struct UninitializedInstruction {}
 
 pub fn (mut inst UninitializedInstruction) fetch_operands(mut reader BytecodeReader) {}
 
-pub fn (mut ints UninitializedInstruction) execute(mut frame Frame) ! {}
+pub fn (mut ints UninitializedInstruction) execute(mut frame Frame) ! {
+	return error('Instruction is under undefined state')
+}
