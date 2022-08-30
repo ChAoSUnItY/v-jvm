@@ -3,9 +3,10 @@ module heap
 import vjvm.classfile { MemberInfo }
 
 pub struct ClassMember {
+	Access
+
 	owner_class &Class [required]
 mut:
-	access_flags u16
 	name string
 	descriptor string
 }
