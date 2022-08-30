@@ -20,3 +20,32 @@ const (
 	acc_annotation   = 0x2000 // class
 	acc_enum         = 0x4000 // class field
 )
+
+interface Access {
+mut:
+	access_flags u16
+}
+
+pub fn (acc &Access) is_public() bool {
+	return acc.access_flags & acc_public != 0
+}
+
+pub fn (acc &Access) is_private() bool {
+	return acc.access_flags & acc_private != 0
+}
+
+pub fn (acc &Access) is_protected() bool {
+	return acc.access_flags & acc_protected != 0
+}
+
+pub fn (acc &Access) is_static() bool {
+	return acc.access_flags & acc_static != 0
+}
+
+pub fn (acc &Access) is_final() bool {
+	return acc.access_flags & acc_final != 0
+}
+
+pub fn (acc &Access) is_synthetic() bool {
+	return acc.access_flags & acc_synthetic != 0
+}
