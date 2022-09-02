@@ -37,3 +37,11 @@ pub fn (class &Class) is_annotation() bool {
 pub fn (class &Class) is_enum() bool {
 	return class.access_flags & acc_enum != 0
 }
+
+pub fn (class &Class) constant_pool() &ConstantPool {
+	return class.constant_pool
+}
+
+pub fn (class &Class) static_slots() &Slots {
+	return class.static_slots
+}
