@@ -1,6 +1,7 @@
 module heap
 
 import vjvm.classfile { ClassFile }
+import vjvm.rtda { Object }
 
 pub struct Class {
 	Access
@@ -44,4 +45,8 @@ pub fn (class &Class) constant_pool() &ConstantPool {
 
 pub fn (class &Class) static_slots() &Slots {
 	return class.static_slots
+}
+
+pub fn (class &Class) new_object() &Object {
+	return new_object(class)
 }
