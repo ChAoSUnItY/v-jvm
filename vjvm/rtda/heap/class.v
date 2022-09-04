@@ -47,6 +47,17 @@ pub fn (class &Class) static_slots() &Slots {
 	return class.static_slots
 }
 
+pub fn (class &Class) is_accessible_to(class2 &Class) bool {
+	return class.is_public() || class.package_name() == class2.package_name()
+}
+
+pub fn (class &Class) package_name() string {
+	i := class.name.last_index('/') or {
+		return ''
+	}
+	return class.name[..i]
+}
+
 pub fn (class &Class) new_object() &Object {
 	return new_object(class)
 }
