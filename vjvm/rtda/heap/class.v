@@ -58,6 +58,20 @@ pub fn (class &Class) package_name() string {
 	return class.name[..i]
 }
 
+pub fn (class &Class) main_method() ?&ClassMember {
+	return class.static_method('main', '([Ljava/lang/String;)V')
+}
+
+pub fn (class &Class) static_method(name string, descriptor string) ?&ClassMember {
+	for method in class.methods {
+		if method.is_static() && method.name() == name && method.descriptor() == descriptor {
+			return method
+		}
+	}
+
+	return none
+}
+
 pub fn (class &Class) new_object() &Object {
 	return new_object(class)
 }
