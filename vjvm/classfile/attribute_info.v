@@ -414,7 +414,7 @@ pub fn (attr &CodeAttribute) max_stack() u16 {
 	return attr.max_stack
 }
 
-pub fn (attr &CodeAttribute) bytecode() []u8 {
+pub fn (attr &CodeAttribute) code() []u8 {
 	return attr.code
 }
 

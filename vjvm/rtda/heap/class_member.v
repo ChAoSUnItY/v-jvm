@@ -4,7 +4,6 @@ import vjvm.classfile { MemberInfo }
 
 pub struct ClassMember {
 	Access
-
 	owner_class &Class [required]
 mut:
 	name string
