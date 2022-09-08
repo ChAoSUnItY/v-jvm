@@ -10,7 +10,7 @@ mut:
 	descriptor string
 }
 
-pub fn (mut member ClassMember) copy(info &MemberInfo) ! {
+pub fn (mut member ClassMember) copy_class_info(info &MemberInfo) ! {
 	member.access_flags = info.access_flags()
 	member.name = info.name()!
 	member.descriptor = info.descriptor()!

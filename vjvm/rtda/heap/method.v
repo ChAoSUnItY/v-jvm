@@ -9,22 +9,23 @@ pub struct Method {
 	code []u8
 }
 
-fn new_methods(class &Class, infos []&MemberInfo) []&Method {
+fn new_methods(class &Class, infos []&MemberInfo) ![]&Method {
 	mut methods := []&Method{cap: class_methods.len}
 	for info in infos {
 		mut method := &Method{}
 		method.class = class
-
+		method.copy_class_memeber(info)!
+		method.copy_attributes(info)
+		methods << method
 	}
 	return methods
 }
 
-fn (mut method Method) copy_attributes(info &MemberInfo) {
-	if code_attr := info.code_attr() {
-		method.max_stack = code_attr.max_stack()
-		method.max_locals = code_attr.max_locals()
-		method.code = code_attr.code()
-	}
+fn (mut method Method) copy_attributes(info &MemberInfo)! {
+	code_attr := info.code_attr() or {return err}
+	method.max_stack = code_attr.max_stack()
+	method.max_locals = code_attr.max_locals()
+	method.code = code_attr.code()
 }
 
 fn (method &Method) is_synchronized() bool {
