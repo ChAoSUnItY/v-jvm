@@ -51,3 +51,12 @@ pub fn (info &MemberInfo) code_attr() ?&CodeAttribute {
 	}
 	return none
 }
+
+pub fn (info &MemberInfo) constant_value_attr() ?&ConstantValueAttribute {
+	for attr in info.attributes {
+		if attr is ConstantValueAttribute {
+			return attr
+		}
+	}
+	return none
+}

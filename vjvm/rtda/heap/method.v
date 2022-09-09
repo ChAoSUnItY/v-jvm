@@ -4,6 +4,7 @@ import vjvm.classfile { MemberInfo }
 
 pub struct Method {
 	ClassMember
+mut:
 	max_stack u32
 	max_locals u32
 	code []u8
@@ -21,7 +22,7 @@ fn new_methods(class &Class, infos []&MemberInfo) ![]&Method {
 	return methods
 }
 
-fn (mut method Method) copy_attributes(info &MemberInfo)! {
+fn (mut method Method) copy_attributes(info &MemberInfo) ! {
 	code_attr := info.code_attr() or {return err}
 	method.max_stack = code_attr.max_stack()
 	method.max_locals = code_attr.max_locals()
