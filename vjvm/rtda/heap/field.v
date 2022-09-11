@@ -6,7 +6,7 @@ pub struct Field {
 	ClassMember
 mut:
 	const_value_index u32
-	slot_id u32
+	slot_id           u32
 }
 
 fn new_fields(class &Class, infos []&MemberInfo) ![]&Field {

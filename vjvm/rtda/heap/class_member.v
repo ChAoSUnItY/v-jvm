@@ -6,7 +6,7 @@ pub struct ClassMember {
 	Access
 	owner_class &Class [required]
 mut:
-	name string
+	name       string
 	descriptor string
 }
 
@@ -36,9 +36,9 @@ pub fn (member &ClassMember) is_accessible_to(class &Class) bool {
 	owner_class := member.owner_class
 
 	if member.is_protected() {
-		return owner_class == class || class.is_sub_class_of(owner_class) || class.package_name() == owner_class.package_name()
+		return owner_class == class || class.is_sub_class_of(owner_class)
+			|| class.package_name() == owner_class.package_name()
 	} else if !member.is_private() {
-
 	} else {
 		return owner_class == class
 	}

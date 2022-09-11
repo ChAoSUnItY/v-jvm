@@ -1,6 +1,6 @@
 module heap
 
-import math { f32_from_bits, f64_from_bitsf32_bits, f64_bits }
+import math { f32_from_bits, f64_bits }
 
 type Slots = []Slot
 
@@ -12,7 +12,7 @@ mut:
 
 fn new_slots(count int) ?Slots {
 	return if count > 0 {
-		[]Slot{len:count, init: Slot{}}
+		[]Slot{len: count, init: Slot{}}
 	} else {
 		none
 	}

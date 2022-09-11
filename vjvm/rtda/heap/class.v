@@ -5,22 +5,21 @@ import vjvm.rtda { Object }
 
 pub struct Class {
 	Access
-	name string
-	super_class_name string
-	interface_names []string
-	constant_pool ConstantPool
-	fields []Field
-	methods []Method
-	loader ClassLoader
-	super_class &Class
-	interfaces []&Class
+	name                string
+	super_class_name    string
+	interface_names     []string
+	constant_pool       ConstantPool
+	fields              []Field
+	methods             []Method
+	loader              ClassLoader
+	super_class         &Class
+	interfaces          []&Class
 	instance_slot_count u32
-	static_slot_count u32
-	static_slots Slots
+	static_slot_count   u32
+	static_slots        Slots
 }
 
 pub fn (mut class Class) from_class_file(cf &ClassFile) {
-	
 }
 
 pub fn (class &Class) is_interface() bool {
@@ -52,9 +51,7 @@ pub fn (class &Class) is_accessible_to(class2 &Class) bool {
 }
 
 pub fn (class &Class) package_name() string {
-	i := class.name.last_index('/') or {
-		return ''
-	}
+	i := class.name.last_index('/') or { return '' }
 	return class.name[..i]
 }
 

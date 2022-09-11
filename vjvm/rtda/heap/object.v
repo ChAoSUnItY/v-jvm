@@ -1,15 +1,12 @@
 module heap
 
 struct Object {
-	class &Class
+	class  &Class
 	fields Slots
 }
 
 fn new_object(class &Class) &Object {
-	return Object {
-		class,
-		new_slots(class.instance_slots_count)
-	}
+	return Object{class, new_slots(class.instance_slots_count)}
 }
 
 fn (obj &Object) class() &Class {
