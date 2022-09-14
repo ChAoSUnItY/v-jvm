@@ -9,3 +9,7 @@ it is only a prove of V's real life application attempt.
 For complete support of JVM, you should download from OpenJDK or Orcale official website.
 
 Notice that Java 8 is almost outdated, I highly recommended uses Java 17.
+
+## Source
+
+- [zxh0](https://github.com/zxh0)/[jvmgo-book](https://github.com/zxh0/jvmgo-book)
