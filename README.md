@@ -12,4 +12,4 @@ Notice that Java 8 is almost outdated, I highly recommended uses Java 17.
 
 ## Source
 
-- [zxh0](https://github.com/zxh0)/[jvmgo-book](https://github.com/zxh0/jvmgo-book)
+- [zxh0](https://github.com/zxh0)/[jvmgo-book](https://github.com/zxh0/jvmgo-book) - 《自己动手写Java虚拟机》 源代码
