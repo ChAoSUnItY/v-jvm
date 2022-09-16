@@ -1,10 +1,10 @@
 module heap
 
 pub struct SymRef {
+	pool &ConstantPool = unsafe { nil }
 mut:
-	pool &ConstantPool
 	class_name string
-	class &Class
+	class &Class = unsafe { nil }
 }
 
 fn (mut ref SymRef) resolve_class() !&Class {
