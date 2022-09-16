@@ -11,7 +11,7 @@ fn (mut ref SymRef) resolve_class() !&Class {
 	if isnil(ref.class) {
 		ref.resolve_class_ref()!
 	}
-	return ref
+	return ref.class
 }
 
 fn (mut ref SymRef) resolve_class_ref() ! {
