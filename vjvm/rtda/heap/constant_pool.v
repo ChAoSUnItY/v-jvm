@@ -62,3 +62,7 @@ fn (pool &ConstantPool) get_constant(index u32) ?Consatnt {
 	}
 	return none
 }
+
+fn (pool &ConstantPool) get<T>(index u32) ?T {
+	return T(pool.get_constant(index)?)
+}

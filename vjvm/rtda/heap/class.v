@@ -11,12 +11,13 @@ pub struct Class {
 	constant_pool       ConstantPool
 	fields              []Field
 	methods             []Method
+mut:
 	loader              ClassLoader
 	super_class         &Class
 	interfaces          []&Class
-	instance_slot_count u32
+	static_vars         Slots
 	static_slot_count   u32
-	static_slots        Slots
+	instance_slot_count u32
 }
 
 pub fn (mut class Class) from_class_file(cf &ClassFile) {
