@@ -1,20 +1,24 @@
 module rtda
 
+import vjvm.rtda.heap { Method }
+
 pub struct Frame {
 mut:
 	local_vars    LocalVars
 	opreand_stack &OperandStack
 	lower         &Frame
 	thread        &Thread
+	method		  &Method
 	next_pc       int
 }
 
-pub fn (thread &Thread) new_frame(max_locals u32, max_stack u32) &Frame {
-	return &Frame{
-		local_vars: new_local_vars(max_locals)
-		opreand_stack: new_operand_stack(max_stack)
-		lower: unsafe { nil }
-		thread: unsafe { thread }
+pub fn (thread &Thread) new_frame(method &Method) Frame {
+	return Frame{
+		local_vars: new_local_vars(method.max_locals())
+		operand_stack: new_operand_stack(method.max_stack())
+		lower: unsafe { nil },
+		thread: unsafe { thread },
+		method: method
 	}
 }
 
@@ -28,6 +32,10 @@ pub fn (frame &Frame) operand_stack() &OperandStack {
 
 pub fn (frame &Frame) thread() &Thread {
 	return frame.thread
+}
+
+pub fn (frame &Frame) method() &Method {
+	return frame.method
 }
 
 pub fn (frame &Frame) next_pc() int {
