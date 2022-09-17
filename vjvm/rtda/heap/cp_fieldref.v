@@ -15,7 +15,7 @@ fn new_field_ref(pool &ConstantPool, info &ConstantFieldRefInfo) FieldRef {
 	return ref
 }
 
-fn (mut ref FieldRef) resolve_field() !&FieldRef {
+fn (mut ref FieldRef) resolve_field() !&Field {
 	if isnil(ref.field) {
 		ref.resolve_field_ref()!
 	}
