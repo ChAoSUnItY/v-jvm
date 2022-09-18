@@ -50,45 +50,40 @@ pub fn (mut stack OperandStack) push_nil() {
 }
 
 [inline]
-pub fn (mut stack OperandStack) pop<T>() !T {
-	$if T is Object {
-		stack.size--
-		return *stack.slots[stack.size].ref
-	} $else $if T is int {
-		stack.size--
-		return stack.slots[stack.size].num
-	} $else $if T is f32 {
-		return f32_from_bits(u32(stack.pop<int>()!))
-	} $else $if T is i64 {
-		low := stack.slots[stack.size].num
-		high := stack.slots[stack.size - 1].num
-		stack.size -= 2
-		return i64(high) << 32 | i64(low)
-	} $else $if T is f64 {
-		return f64_from_bits(u64(stack.pop<i64>()!))
-	} $else $if T is Slot {
-		stack.size--
-		return stack.slots[stack.size]
-	} $else {
-		return error('$T.name is not a valid slot item')
-	}
+pub fn (mut stack OperandStack) pop_int() int {
+	stack.size--
+	return stack.slots[stack.size].num
 }
 
 [inline]
-pub fn (mut stack OperandStack) pop2<T>() !(T, T) {
-	$if T is i64 || T is f64 {
-		stack.size -= 4
-		val1_1 := stack.slots[stack.size + 3]
-		val1_2 := stack.slots[stack.size + 2]
-		val2_1 := stack.slots[stack.size + 1]
-		val2_2 := stack.slots[stack.size]
-		return val2_1.conv2<T>(val2_2)!, val1_1.conv2<T>(val1_2)!
-	} $else {
-		stack.size -= 2
-		val1 := stack.slots[stack.size + 1]
-		val2 := stack.slots[stack.size]
-		return val2.conv<T>()!, val1.conv<T>()!
-	}
+pub fn (mut stack OperandStack) pop_f32() f32 {
+	stack.size--
+	return f32_from_bits(u32(stack.pop_int()))
+}
+
+[inline]
+pub fn (mut stack OperandStack) pop_i64() i64 {
+	low := stack.slots[stack.size - 1].num
+	high := stack.slots[stack.size - 2].num
+	stack.size -= 2
+	return i64(high) << 32 | i64(low)
+}
+
+[inline]
+pub fn (mut stack OperandStack) pop_f64() f64 {
+	return f64_from_bits(u64(stack.i64()!))
+}
+
+[inline]
+pub fn (mut stack OperandStack) pop_slot() Slot {
+	stack.size--
+	return stack.slots[stack.size]
+}
+
+[inline]
+pub fn (mut stack OperandStack) pop_ref() &Object {
+	stack.size--
+	return stack.slots[stak.size].ref
 }
 
 [inline]
