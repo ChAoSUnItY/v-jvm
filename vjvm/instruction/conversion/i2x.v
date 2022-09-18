@@ -9,8 +9,8 @@ pub struct I2B {
 
 pub fn (mut inst I2B) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val := stack.pop<int>()!
-	stack.push<int>(i8(val))
+	val := stack.pop_int()!
+	stack.push_int(i8(val))
 }
 
 pub struct I2C {
@@ -19,8 +19,8 @@ pub struct I2C {
 
 pub fn (mut inst I2C) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val := stack.pop<int>()!
-	stack.push<int>(u16(val))
+	val := stack.pop_int()!
+	stack.push_int(u16(val))
 }
 
 pub struct I2S {
@@ -29,8 +29,8 @@ pub struct I2S {
 
 pub fn (mut inst I2S) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val := stack.pop<int>()!
-	stack.push<int>(i16(val))
+	val := stack.pop_int()!
+	stack.push_int(i16(val))
 }
 
 pub struct I2F {
@@ -39,8 +39,8 @@ pub struct I2F {
 
 pub fn (mut inst I2F) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val := stack.pop<int>()!
-	stack.push<f32>(val)
+	val := stack.pop_int()!
+	stack.push_f32(val)
 }
 
 pub struct I2D {
@@ -49,8 +49,8 @@ pub struct I2D {
 
 pub fn (mut inst I2D) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val := stack.pop<int>()!
-	stack.push<f64>(val)
+	val := stack.pop_int()!
+	stack.push_f64(val)
 }
 
 pub struct I2L {
@@ -59,6 +59,6 @@ pub struct I2L {
 
 pub fn (mut inst I2L) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val := stack.pop<int>()!
-	stack.push<i64>(val)
+	val := stack.pop_int()!
+	stack.push_i64(val)
 }
