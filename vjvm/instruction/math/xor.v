@@ -9,8 +9,9 @@ pub struct IXOR {
 
 pub fn (mut inst IXOR) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val1, val2 := stack.pop2<int>()!
-	stack.push<int>(val1 ^ val2)
+	val2 := stack.pop_int()
+	val1 := stack.pop_int()
+	stack.push_int(val1 ^ val2)
 }
 
 pub struct LXOR {
@@ -19,6 +20,7 @@ pub struct LXOR {
 
 pub fn (mut inst LXOR) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val1, val2 := stack.pop2<i64>()!
-	stack.push<i64>(val1 ^ val2)
+	val2 := stack.pop_i64()
+	val1 := stack.pop_i64()
+	stack.push_i64(val1 ^ val2)
 }

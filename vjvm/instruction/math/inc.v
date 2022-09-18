@@ -16,7 +16,7 @@ pub fn (mut inst IINC) fetch_operands(mut reader BytecodeReader) {
 
 pub fn (mut inst IINC) execute(mut frame Frame) ! {
 	mut local := frame.local_vars()
-	mut val := local.get<int>(inst.index)!
+	mut val := local.get_int(inst.index)!
 	val += inst.@const
-	local.set<int>(val, inst.index)
+	local.set_int(val, inst.index)
 }
