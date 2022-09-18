@@ -9,7 +9,8 @@ pub struct IF_ICMPEQ {
 
 pub fn (mut inst IF_ICMPEQ) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val1, val2 := stack.pop2<int>()!
+	val2 := stack.pop_int()
+	val1 := stack.pop_int()
 	if val1 == val2 {
 		branch(mut frame, inst.offset)
 	}
@@ -21,7 +22,8 @@ pub struct IF_ICMPNE {
 
 pub fn (mut inst IF_ICMPNE) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val1, val2 := stack.pop2<int>()!
+	val2 := stack.pop_int()
+	val1 := stack.pop_int()
 	if val1 != val2 {
 		branch(mut frame, inst.offset)
 	}
@@ -33,7 +35,8 @@ pub struct IF_ICMPLT {
 
 pub fn (mut inst IF_ICMPLT) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val1, val2 := stack.pop2<int>()!
+	val2 := stack.pop_int()
+	val1 := stack.pop_int()
 	if val1 < val2 {
 		branch(mut frame, inst.offset)
 	}
@@ -45,7 +48,8 @@ pub struct IF_ICMPLE {
 
 pub fn (mut inst IF_ICMPLE) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val1, val2 := stack.pop2<int>()!
+	val2 := stack.pop_int()
+	val1 := stack.pop_int()
 	if val1 <= val2 {
 		branch(mut frame, inst.offset)
 	}
@@ -57,7 +61,8 @@ pub struct IF_ICMPGT {
 
 pub fn (mut inst IF_ICMPGT) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val1, val2 := stack.pop2<int>()!
+	val2 := stack.pop_int()
+	val1 := stack.pop_int()
 	if val1 > val2 {
 		branch(mut frame, inst.offset)
 	}
@@ -69,7 +74,8 @@ pub struct IF_ICMPGE {
 
 pub fn (mut inst IF_ICMPGE) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	val1, val2 := stack.pop2<int>()!
+	val2 := stack.pop_int()
+	val1 := stack.pop_int()
 	if val1 >= val2 {
 		branch(mut frame, inst.offset)
 	}

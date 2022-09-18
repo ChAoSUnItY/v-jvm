@@ -8,7 +8,19 @@ pub struct DCMPG {
 }
 
 pub fn (mut inst DCMPG) execute(mut frame Frame) ! {
-	cmp_g<f64>(mut frame)!
+	mut stack := frame.operand_stack()
+	val2 := stack.pop_f64()
+	val1 := stack.pop_f64()
+	val := if val1 > val2 {
+		1
+	} else if val1 == val2 {
+		0
+	} else if val1 < val2 {
+		-1
+	} else {
+		1
+	}
+	stack.push_int(val)
 }
 
 pub struct DCMPL {
@@ -16,5 +28,17 @@ pub struct DCMPL {
 }
 
 pub fn (mut inst DCMPL) execute(mut frame Frame) ! {
-	cmp_l<f64>(mut frame)!
+	mut stack := frame.operand_stack()
+	val2 := stack.pop_f64()
+	val1 := stack.pop_f64()
+	val := if val1 > val2 {
+		1
+	} else if val1 == val2 {
+		0
+	} else if val1 < val2 {
+		-1
+	} else {
+		-1
+	}
+	stack.push_int(val)
 }
