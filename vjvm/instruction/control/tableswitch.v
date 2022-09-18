@@ -22,7 +22,7 @@ pub fn (mut inst TABLE_SWITCH) fetch_operands(mut reader BytecodeReader) {
 
 pub fn (mut inst TABLE_SWITCH) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	index := stack.pop<int>()!
+	index := stack.pop_int()!
 
 	offset := if index >= inst.low && index <= inst.high {
 		inst.jump_offsets[index - inst.low]
