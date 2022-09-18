@@ -8,7 +8,7 @@ pub struct FLOAD {
 }
 
 pub fn (mut inst FLOAD) execute(mut frame Frame) ! {
-	load<f32>(mut frame, inst.index)!
+	fload(mut frame, inst.index)!
 }
 
 pub struct FLOAD_0 {
@@ -16,7 +16,7 @@ pub struct FLOAD_0 {
 }
 
 pub fn (mut inst FLOAD_0) execute(mut frame Frame) ! {
-	load<f32>(mut frame, 0)!
+	fload(mut frame, 0)!
 }
 
 pub struct FLOAD_1 {
@@ -24,7 +24,7 @@ pub struct FLOAD_1 {
 }
 
 pub fn (mut inst FLOAD_1) execute(mut frame Frame) ! {
-	load<f32>(mut frame, 1)!
+	fload(mut frame, 1)!
 }
 
 pub struct FLOAD_2 {
@@ -32,7 +32,7 @@ pub struct FLOAD_2 {
 }
 
 pub fn (mut inst FLOAD_2) execute(mut frame Frame) ! {
-	load<f32>(mut frame, 2)!
+	fload(mut frame, 2)!
 }
 
 pub struct FLOAD_3 {
@@ -40,5 +40,12 @@ pub struct FLOAD_3 {
 }
 
 pub fn (mut inst FLOAD_3) execute(mut frame Frame) ! {
-	load<f32>(mut frame, 3)!
+	fload(mut frame, 3)!
+}
+
+[inline]
+fn fload(mut frame Frame, index u32) {
+	val := frame.local_vars().get_f32(index)
+	mut stack := frame.operand_stack()
+	return stack.push_f32(val)
 }

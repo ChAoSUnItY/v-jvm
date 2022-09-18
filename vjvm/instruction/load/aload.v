@@ -8,7 +8,7 @@ pub struct ALOAD {
 }
 
 pub fn (mut inst ALOAD) execute(mut frame Frame) ! {
-	load<Object>(mut frame, inst.index)!
+	aload(mut frame, inst.index)
 }
 
 pub struct ALOAD_0 {
@@ -16,7 +16,7 @@ pub struct ALOAD_0 {
 }
 
 pub fn (mut inst ALOAD_0) execute(mut frame Frame) ! {
-	load<Object>(mut frame, 0)!
+	aload(mut frame, 0)
 }
 
 pub struct ALOAD_1 {
@@ -24,7 +24,7 @@ pub struct ALOAD_1 {
 }
 
 pub fn (mut inst ALOAD_1) execute(mut frame Frame) ! {
-	load<Object>(mut frame, 1)!
+	aload(mut frame, 1)
 }
 
 pub struct ALOAD_2 {
@@ -32,7 +32,7 @@ pub struct ALOAD_2 {
 }
 
 pub fn (mut inst ALOAD_2) execute(mut frame Frame) ! {
-	load<Object>(mut frame, 2)!
+	aload(mut frame, 2)
 }
 
 pub struct ALOAD_3 {
@@ -40,5 +40,12 @@ pub struct ALOAD_3 {
 }
 
 pub fn (mut inst ALOAD_3) execute(mut frame Frame) ! {
-	load<Object>(mut frame, 3)!
+	aload(mut frame, 3)
+}
+
+[inline]
+fn aload(mut frame Frame, index u32)  {
+	val := frame.local_vars().get_ref(index)
+	mut stack := frame.operand_stack()
+	return stack.push_ref(val)
 }
