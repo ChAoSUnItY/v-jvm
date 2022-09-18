@@ -17,30 +17,32 @@ fn new_operand_stack(max_size u32) &OperandStack {
 }
 
 [inline]
-pub fn (mut stack OperandStack) push<T>(val T) {
-	$if T is Object {
-		stack.slots[stack.size].ref = &val
-		stack.size++
-	} $else $if T is int {
-		stack.slots[stack.size].num = val
-		stack.size++
-	} $else $if T is f32 {
-		stack.slots[stack.size].num = int(f32_bits(val))
-		stack.size++
-	} $else $if T is i64 {
-		stack.slots[stack.size].num = int(val)
-		stack.slots[stack.size + 1].num = int(i64(val) >> 32)
-		stack.size += 2
-	} $else $if T is f32 {
-		bits := i64(f32_bits(val))
-		stack.push(bits)
-	} $else $if T is f64 {
-		bits := i64(f64_bits(val))
-		stack.push(bits)
-	} $else $if T is Slot {
-		stack.slots[stack.size] = val
-		stack.size++
-	}
+pub fn (mut stack OperandStack) push_int(val int) {
+	stack.slots[stack.size].num = val
+}
+
+[inline]
+pub fn (mut stack OperandStack) push_f32(val f32) {
+	stack.slots[stack.size].num = int(f32_bits(val))
+	stack.size++
+}
+
+[inline]
+pub fn (mut stack OperandStack) push_i64(val i64) {
+	stack.slots[stack.size].num = int(val)
+	stack.slots[stack.size + 1].num = int(i64(val) >> 32)
+	stack.size += 2
+}
+
+[inline]
+pub fn (mut stack OperandStack) push_f64(val f64) {
+	bits := i64(f64_bits(val))
+	stack.push(bits)
+}
+
+[inline]
+pub fn (mut stack OperandStack) push_ref(val &Object) {
+	stack.slots[stack.size].ref = val
 }
 
 [inline]
