@@ -19,38 +19,55 @@ fn new_slots(count int) ?Slots {
 }
 
 [inline]
-fn (mut slots Slots) set<T>(index u32, val T) {
-	$if T is int {
-		slots[index].num = val
-	} $else $if T is f32 {
-		slots[index].num = int(f32_bits(val))
-	} $else $if T is i64 {
-		slots[index].num = int(val)
-		slots[index + 1].num = int(val >> 32)
-	} $else $if T is f64 {
-		slots.set<i64>(index, f64_bits(val))
-	} $else $if T is Object {
-		slots[index].ref = &val
-	}
+pub fn (mut slots Slots) set_int(val int, index u32) {
+	slots[index].num = val
 }
 
 [inline]
-fn (mut slots Slots) get<T>(index u32) !T {
-	$if T is Object {
-		return *slots[index].ref
-	} $else $if T is int {
-		return slots[index].num
-	} $else $if T is f32 {
-		return f32_from_bits(u32(local.slots[index].num))
-	} $else $if T is i64 {
-		low := slots[index].num
-		high := slots[index - 1].num
-		return i64(high) << 32 | i64(low)
-	} $else $if T is f32 {
-		return f32_from_bits(u32(slots[index].num))
-	} $else $if T is f64 {
-		return f64_from_bits(u64(get<i64>(index)!))
-	} $else {
-		return error('$T.name is not a valid Slot item')
-	}
+pub fn (mut slots Slots) set_f32(val f32, index u32) {
+	slots[index].num = int(f32_bits(val))
+}
+
+[inline]
+pub fn (mut slots Slots) set_i64(val i64, index u32) {
+	slots[index].num = int(val)
+	slots[index + 1].num = int(val >> 32)
+}
+
+[inline]
+pub fn (mut slots Slots) set_f64(val f64, index u32) {
+	slots.set_i64(index, f64_bits(val))
+	slots[index].num = int(f32_bits(val))
+}
+
+[inline]
+pub fn (mut slots Slots) set_ref(ref &Object, index u32) {
+	slots[index].ref = val
+}
+
+[inline]
+pub fn (slots &Slots) get_int(index u32) int {
+	return slots[index].num
+}
+
+[inline]
+pub fn (slots &Slots) get_f32(index u32) f32 {
+	return f32_from_bits(u32(local.slots[index].num))
+}
+
+[inline]
+pub fn (slots &Slots) get_i64(index u32) i64 {
+	low := slots[index].num
+	high := slots[index - 1].num
+	return i64(high) << 32 | i64(low)
+}
+
+[inline]
+pub fn (slots &Slots) get_f64(index u32) f64 {
+	return f64_from_bits(u64(get<i64>(index)!))
+}
+
+[inline]
+pub fn (slots &Slots) get_ref(index u32) &Object {
+	return slots[index].ref
 }
