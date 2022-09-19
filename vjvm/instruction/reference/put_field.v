@@ -17,21 +17,23 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 	field := field_ref.resolve_field()!
 	field_class := field_ref.class()!
 
-	if !field.is_static() {
+	if field.is_static() {
 		return error('java.lang.IncompatibleClassChangeError')
 	}
 
-	if field.is_final() && (class != field_class || method.name() != "<clinit>") {
+	if field.is_final() && (class != field_class || method.name() != "<init>") {
 		return error('java.lang.IllegalAccessError')
 	}
 
 	descriptor := field.descriptor()
 	slot_id := field.slot_id()
-	slots := field_class.static_vars()
 	mut stack := frame.operand_stack()
 
 	match descriptor[0] {
 		'Z', 'B', 'C', 'S', 'I' {
+			val := stack.pop_int()
+			ref := stack.pop_ref()
+			
 			slots.set<int>(slot_id, stack.pop<int>()!)
 		}
 		'J' {

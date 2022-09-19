@@ -2,17 +2,10 @@ module rtda
 
 import math { f32_bits, f32_from_bits, f64_bits, f64_from_bits }
 
-struct LocalVars {
-mut:
-	slots []Slot
-}
+type LocalVars = []Slot
 
-fn new_local_vars(max_locals u32) &LocalVars {
-	return if max_locals > 0 {
-		&LocalVars{[]Slot{len: int(max_locals), init: Slot{0, unsafe { nil }}}}
-	} else {
-		unsafe { nil }
-	}
+fn new_local_vars(max_locals u32) ?LocalVars {
+	return []Slot{len:int(max_locals), init: Slot{}}
 }
 
 [inline]
@@ -43,28 +36,28 @@ pub fn (mut local LocalVars) set_ref(val &Object, index u32) {
 }
 
 [inline]
-pub fn (mut local LocalVars) get_int(index u32) int {
+pub fn (local &LocalVars) get_int(index u32) int {
 	return local.slots[index].num
 }
 
 [inline]
-pub fn (mut local LocalVars) get_f32(index u32) f32 {
+pub fn (local &LocalVars) get_f32(index u32) f32 {
 	return f32_from_bits(u32(local.slots[index].num))
 }
 
 [inline]
-pub fn (mut local LocalVars) get_i64(index u32) i64 {
+pub fn (local &LocalVars) get_i64(index u32) i64 {
 	low := local.slots[index].num
 	high := local.slots[index - 1].num
 	return i64(high) << 32 | i64(low)
 }
 
 [inline]
-pub fn (mut local LocalVars) get_f64(index u32) f64 {
+pub fn (local &LocalVars) get_f64(index u32) f64 {
 	return f64_from_bits(u64(local.get_i64(index)))
 }
 
 [inline]
-pub fn (mut local LocalVars) get_ref(index u32) &Object {
+pub fn (local &LocalVars) get_ref(index u32) &Object {
 	return local.slots[index].ref
 }
