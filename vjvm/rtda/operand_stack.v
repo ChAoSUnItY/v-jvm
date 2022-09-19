@@ -52,6 +52,12 @@ pub fn (mut stack OperandStack) push_nil() {
 }
 
 [inline]
+pub fn (mut stack OperandStack) push_slot(val Slot) {
+	stack.slots[stack.size] = val
+	stack.size++
+}
+
+[inline]
 pub fn (mut stack OperandStack) pop_int() int {
 	stack.size--
 	return stack.slots[stack.size].num
@@ -77,15 +83,15 @@ pub fn (mut stack OperandStack) pop_f64() f64 {
 }
 
 [inline]
-pub fn (mut stack OperandStack) pop_slot() Slot {
-	stack.size--
-	return stack.slots[stack.size]
-}
-
-[inline]
 pub fn (mut stack OperandStack) pop_ref() &Object {
 	stack.size--
 	return stack.slots[stak.size].ref
+}
+
+[inline]
+pub fn (mut stack OperandStack) pop_slot() Slot {
+	stack.size--
+	return stack.slots[stack.size]
 }
 
 [inline]
