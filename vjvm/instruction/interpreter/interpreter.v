@@ -37,7 +37,7 @@ fn loop(mut thread Thread, bytecode []byte) ! {
 }
 
 fn catch_err(err IError, frame Frame) {
-	println('Local vars: $frame.local_vars()')
-	println('Operand stack: $frame.operand_stack()')
-	panic(err.msg)
+	// println('Local vars: $frame.local_vars()')
+	// println('Operand stack: $frame.operand_stack()')
+	// panic(err.msg)
 }

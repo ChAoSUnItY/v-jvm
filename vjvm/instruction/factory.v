@@ -2,12 +2,13 @@ module instruction
 
 import vjvm.instruction.base { Instruction }
 import vjvm.instruction.comparison { DCMPG, DCMPL, FCMPG, FCMPL, IFEQ, IFGE, IFGT, IFLE, IFLT, IFNE, IF_ACMPEQ, IF_ACMPNE, IF_ICMPEQ, IF_ICMPGE, IF_ICMPGT, IF_ICMPLE, IF_ICMPLT, IF_ICMPNE, LCMP }
-import vjvm.instruction.constant { ACONST_NULL, BIPUSH, DCONST_0, DCONST_1, FCONST_0, FCONST_1, FCONST_2, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5, ICONST_M1, LCONST_0, LCONST_1, NOP, SIPUSH }
+import vjvm.instruction.constant { ACONST_NULL, BIPUSH, DCONST_0, DCONST_1, FCONST_0, FCONST_1, FCONST_2, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5, ICONST_M1, LCONST_0, LCONST_1, LDC, LDC_W, LDC2_W, NOP, SIPUSH }
 import vjvm.instruction.control { GOTO, LOOKUP_SWITCH, TABLE_SWITCH }
 import vjvm.instruction.conversion { D2F, D2I, D2L, F2D, F2I, F2L, I2B, I2C, I2D, I2F, I2L, I2S, L2D, L2F, L2I }
 import vjvm.instruction.extended { GOTO_W, IFNONNULL, IFNULL, WIDE }
 import vjvm.instruction.load { ALOAD, ALOAD_0, ALOAD_1, ALOAD_2, ALOAD_3, DLOAD, DLOAD_0, DLOAD_1, DLOAD_2, DLOAD_3, FLOAD, FLOAD_0, FLOAD_1, FLOAD_2, FLOAD_3, ILOAD, ILOAD_0, ILOAD_1, ILOAD_2, ILOAD_3, LLOAD, LLOAD_0, LLOAD_1, LLOAD_2, LLOAD_3 }
 import vjvm.instruction.math { DADD, DDIV, DMUL, DNEG, DREM, DSUB, FADD, FDIV, FMUL, FNEG, FREM, FSUB, IADD, IAND, IDIV, IINC, IMUL, INEG, IOR, IREM, ISHL, ISHR, ISUB, IUSHR, IXOR, LADD, LAND, LDIV, LMUL, LNEG, LOR, LREM, LSHL, LSHR, LSUB, LUSHR, LXOR }
+import vjvm.instruction.reference { CHECK_CAST, GET_FIELD, GET_STATIC, INSTANCE_OF, INVOKE_SPECIAL, INVOKE_VIRTUAL, NEW, PUT_FIELD, PUT_STATIC }
 import vjvm.instruction.stack { DUP, DUP2, DUP2_X1, DUP2_X2, DUP_X1, DUP_X2, POP, POP2, SWAP }
 import vjvm.instruction.store { ASTORE, ASTORE_0, ASTORE_1, ASTORE_2, ASTORE_3, DSTORE, DSTORE_0, DSTORE_1, DSTORE_2, DSTORE_3, FSTORE, FSTORE_0, FSTORE_1, FSTORE_2, FSTORE_3, ISTORE, ISTORE_0, ISTORE_1, ISTORE_2, ISTORE_3, LSTORE, LSTORE_0, LSTORE_1, LSTORE_2, LSTORE_3 }
 
@@ -218,12 +219,15 @@ pub fn new_instruction(opcode u8) !Instruction {
 		0x11 {
 			return base.Instruction(SIPUSH{})
 		}
-		// case 0x12:
-		// 	return LDC{}
-		// case 0x13:
-		// 	return LDC_W{}
-		// case 0x14:
-		// 	return LDC2_W{}
+		0x12 {
+			return base.Instruction(LDC{})
+		}
+		0x13 {
+			return base.Instruction(LDC_W{})
+		}
+		0x14 {
+			return base.Instruction(LDC2_W{})
+		}
 		0x15 {
 			return base.Instruction(ILOAD{})
 		}
@@ -671,26 +675,33 @@ pub fn new_instruction(opcode u8) !Instruction {
 		// 	return areturn
 		// case 0xb1:
 		// 	return _return
-		//	case 0xb2:
-		//		return GET_STATIC{}
-		// case 0xb3:
-		// 	return PUT_STATIC{}
-		// case 0xb4:
-		// 	return GET_FIELD{}
-		// case 0xb5:
-		// 	return PUT_FIELD{}
-		//	case 0xb6:
-		//		return INVOKE_VIRTUAL{}
-		// case 0xb7:
-		// 	return INVOKE_SPECIAL{}
+		0xb2 {
+			return base.Instruction(GET_STATIC{})
+		}
+		0xb3 {
+			return base.Instruction(PUT_STATIC{})
+		}
+		0xb4 {
+			return base.Instruction(GET_FIELD{})
+		}
+		0xb5 {
+			return base.Instruction(PUT_FIELD{})
+		}
+		0xb6 {
+			return base.Instruction(INVOKE_VIRTUAL{})
+		}
+		0xb7 {
+			return base.Instruction(INVOKE_SPECIAL{})
+		}
 		// case 0xb8:
 		// 	return INVOKE_STATIC{}
 		// case 0xb9:
 		// 	return INVOKE_INTERFACE{}
 		// case 0xba:
 		// 	return INVOKE_DYNAMIC{}
-		// case 0xbb:
-		// 	return NEW{}
+		0xbb {
+			return base.Instruction(NEW{})
+		}
 		// case 0xbc:
 		// 	return NEW_ARRAY{}
 		// case 0xbd:
@@ -699,10 +710,12 @@ pub fn new_instruction(opcode u8) !Instruction {
 		// 	return arraylength
 		// case 0xbf:
 		// 	return athrow
-		// case 0xc0:
-		// 	return CHECK_CAST{}
-		// case 0xc1:
-		// 	return INSTANCE_OF{}
+		0xc0 {
+			return base.Instruction(CHECK_CAST{})
+		}
+		0xc1 {
+			return base.Instruction(INSTANCE_OF{})
+		}
 		// case 0xc2:
 		// 	return monitorenter
 		// case 0xc3:
