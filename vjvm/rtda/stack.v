@@ -10,7 +10,11 @@ mut:
 }
 
 fn new_stack(max_size u32) &Stack {
-	return &Stack{max_size, 0, unsafe { nil }}
+	return if max_size > 0 {
+		&Stack{max_size, 0, unsafe { nil }}
+	} else {
+		unsafe { nil }
+	}
 }
 
 fn (mut stack Stack) push(mut frame Frame) ! {

@@ -8,7 +8,7 @@ mut:
 	slots []Slot
 }
 
-fn new_operand_stack(max_size u32) ?OperandStack {
+fn new_operand_stack(max_size u32) &OperandStack {
 	return if max_size > 0 {
 		OperandStack{0, []Slot{len: int(max_size), init: Slot{}}}
 	} else {
