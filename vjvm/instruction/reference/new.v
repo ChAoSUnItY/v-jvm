@@ -9,7 +9,7 @@ pub struct NEW {
 
 pub fn (mut inst NEW) execute(mut frame Frame) ! {
 	pool := frame.method().class().constant_pool()
-	class_ref := pool.get<heap.ClassRef>(inst.index) or {
+	class_ref := pool.get<ClassRef>(inst.index) or {
 		return error('Unable to retrieve class info from constant pool')
 	}
 	class := class_ref.resolve_class()!

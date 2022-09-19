@@ -1,16 +1,15 @@
 module heap
 
 import vjvm.classfile { ClassFile }
-import vjvm.rtda { Object }
 
 pub struct Class {
 	Access
-	name                string
-	super_class_name    string
-	interface_names     []string
-	constant_pool       ConstantPool
-	fields              []Field
-	methods             []Method
+	name             string
+	super_class_name string
+	interface_names  []string
+	constant_pool    ConstantPool
+	fields           []Field
+	methods          []Method
 mut:
 	loader              ClassLoader
 	super_class         &Class

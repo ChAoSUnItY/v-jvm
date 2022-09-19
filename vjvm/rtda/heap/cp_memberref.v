@@ -5,7 +5,7 @@ import vjvm.classfile { ConstantMemberRefInfo }
 pub struct MemberRef {
 	SymRef
 mut:
-	name string
+	name       string
 	descriptor string
 }
 

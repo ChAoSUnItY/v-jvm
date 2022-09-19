@@ -25,4 +25,3 @@ fn (mut ref InterfaceMethodRef) resolve_interface_method() !&Method {
 fn (mut ref InterfaceMethodRef) resolve_interface_method_ref() ! {
 	// TODO
 }
-

@@ -1,18 +1,18 @@
 module heap
 
-import vjvm.classfile { ConstantIntegerInfo, ConstantFloatInfo, ConstantLongInfo, ConstantDoubleInfo, ConstantStringInfo, ConstantClassInfo, ConstantFieldRefInfo, ConstantMethodRefInfo, ConstantInterfaceMethodRefInfo }
+import vjvm.classfile { ConstantClassInfo, ConstantDoubleInfo, ConstantFieldRefInfo, ConstantFloatInfo, ConstantIntegerInfo, ConstantInterfaceMethodRefInfo, ConstantLongInfo, ConstantStringInfo }
 
 pub interface Constant {}
 
 pub struct ConstantPool {
 mut:
-	class &Class
+	class     &Class
 	constants []Constant
 }
 
 fn new_constant_pool(class &Class, cf_pool &classfile.ConstantPool) !ConstantPool {
 	count := cf_pool.len()
-	constants := []Constant{cap:pool}
+	constants := []Constant{cap: pool}
 	pool := ConstantPool{class, constants}
 
 	for i := 1; i < count; i++ {

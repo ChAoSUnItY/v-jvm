@@ -2,7 +2,7 @@ module instruction
 
 import vjvm.instruction.base { Instruction }
 import vjvm.instruction.comparison { DCMPG, DCMPL, FCMPG, FCMPL, IFEQ, IFGE, IFGT, IFLE, IFLT, IFNE, IF_ACMPEQ, IF_ACMPNE, IF_ICMPEQ, IF_ICMPGE, IF_ICMPGT, IF_ICMPLE, IF_ICMPLT, IF_ICMPNE, LCMP }
-import vjvm.instruction.constant { ACONST_NULL, BIPUSH, DCONST_0, DCONST_1, FCONST_0, FCONST_1, FCONST_2, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5, ICONST_M1, LCONST_0, LCONST_1, LDC, LDC_W, LDC2_W, NOP, SIPUSH }
+import vjvm.instruction.constant { ACONST_NULL, BIPUSH, DCONST_0, DCONST_1, FCONST_0, FCONST_1, FCONST_2, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5, ICONST_M1, LCONST_0, LCONST_1, LDC, LDC2_W, LDC_W, NOP, SIPUSH }
 import vjvm.instruction.control { GOTO, LOOKUP_SWITCH, TABLE_SWITCH }
 import vjvm.instruction.conversion { D2F, D2I, D2L, F2D, F2I, F2L, I2B, I2C, I2D, I2F, I2L, I2S, L2D, L2F, L2I }
 import vjvm.instruction.extended { GOTO_W, IFNONNULL, IFNULL, WIDE }

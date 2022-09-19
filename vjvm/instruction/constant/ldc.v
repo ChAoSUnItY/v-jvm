@@ -1,8 +1,8 @@
 module constant
 
-import vjvm.instruction.base { Index8Instruction, Index16Instruction }
+import vjvm.instruction.base { Index16Instruction, Index8Instruction }
 import vjvm.rtda { Frame }
-import vjvm.rtda.heap { ClassRef }
+import vjvm.rtda.heap
 
 pub struct LDC {
 	Index8Instruction

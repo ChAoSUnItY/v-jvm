@@ -4,11 +4,11 @@ import vjvm.instruction.base { Index16Instruction }
 import vjvm.rtda { Frame }
 import vjvm.rtda.heap { FieldRef }
 
-pub struct PUT_STATIC {
+pub struct GET_FIELD {
 	Index16Instruction
 }
 
-pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
+pub fn (mut inst GET_FIELD) execute(mut frame Frame) ! {
 	method := frame.method()
 	class := method.class()
 	pool := class.constant_pool()

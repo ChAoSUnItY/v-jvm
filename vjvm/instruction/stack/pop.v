@@ -1,7 +1,7 @@
 module stack
 
 import vjvm.instruction.base { NoOperandInstruction }
-import vjvm.rtda { Frame, Slot }
+import vjvm.rtda { Frame }
 
 // {val} -> {}
 pub struct POP {

@@ -1,9 +1,9 @@
 module main
 
 import vjvm
-import vjvm.entry { ClassPath, parse_cp }
+import vjvm.entry { parse_cp }
 import vjvm.cmd { Cmd, parse_cmd }
-import vjvm.classfile { ClassFile, MemberInfo, parse_cf }
+import vjvm.classfile
 import vjvm.instruction.interpreter { interpret }
 import vjvm.rtda.heap { new_class_loader }
 

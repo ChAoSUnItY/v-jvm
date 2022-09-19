@@ -25,4 +25,4 @@ pub fn (mut inst CHECKCAST) execute(mut frame Frame) ! {
 	if !ref.is_instance_of(class) {
 		return error('java.lang.ClassCastException')
 	}
-} 
+}

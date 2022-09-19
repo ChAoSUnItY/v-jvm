@@ -26,19 +26,19 @@ pub fn (mut inst INVOKE_VIRTUAL) execute(mut frame Frame) ! {
 				println('${rune(stack.pop_int())}')
 			}
 			'(I)V' {
-				println('${stack.pop_int()}')
+				println('$stack.pop_int()')
 			}
 			'(F)V' {
-				println('${stack.pop_f32()}')
+				println('$stack.pop_f32()')
 			}
 			'(J)V' {
-				println('${stack.pop_i64()}')
+				println('$stack.pop_i64()')
 			}
 			'(D)V' {
-				println('${stack.pop_f64()}')
+				println('$stack.pop_f64()')
 			}
 			else {
-				return error('println: `${method_ref.descriptor()}`')
+				return error('println: `$method_ref.descriptor()`')
 			}
 		}
 

@@ -4,15 +4,15 @@ import vjvm.instruction.base { Index16Instruction }
 import vjvm.rtda { Frame }
 import vjvm.rtda.heap { FieldRef }
 
-pub struct PUT_STATIC {
+pub struct PUT_FIELD {
 	Index16Instruction
 }
 
-pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
+pub fn (mut inst PUT_FIELD) execute(mut frame Frame) ! {
 	method := frame.method()
 	class := method.class()
 	pool := class.constant_pool()
-	field_ref := pool.get<heap.FieldRef>(inst.index) or {
+	field_ref := pool.get<FieldRef>(inst.index) or {
 		return error('Unable to retrieve field ref from constant pool')
 	}
 	field := field_ref.resolve_field()!
@@ -22,7 +22,7 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 		return error('java.lang.IncompatibleClassChangeError')
 	}
 
-	if field.is_final() && (class != field_class || method.name() != "<init>") {
+	if field.is_final() && (class != field_class || method.name() != '<init>') {
 		return error('java.lang.IllegalAccessError')
 	}
 
@@ -38,13 +38,13 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 			if isnil(ref) {
 				return error('java.lang.NullPointerException')
 			}
-			
+
 			ref.fields().set_int(slot_id, val)
 		}
 		'J' {
 			val := stack.pop_i64()
 			ref := stack.pop_ref()
-			
+
 			if isnil(ref) {
 				return error('java.lang.NullPointerException')
 			}
@@ -54,7 +54,7 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 		'F' {
 			val := stack.pop_f32()
 			ref := stack.pop_ref()
-			
+
 			if isnil(ref) {
 				return error('java.lang.NullPointerException')
 			}
@@ -68,7 +68,7 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 			if isnil(ref) {
 				return error('java.lang.NullPointerException')
 			}
-			
+
 			ref.fields().set_f64(slot_id, val)
 		}
 		'L', '[' {
@@ -78,7 +78,7 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 			if isnil(ref) {
 				return error('java.lang.NullPointerException')
 			}
-			
+
 			ref.fields().set_ref(slot_id, val)
 		}
 		else {

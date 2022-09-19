@@ -1,7 +1,7 @@
 module heap
 
 import vjvm.classfile { parse_cf }
-import vjvm.entry { ClassPath, Entry }
+import vjvm.entry { ClassPath }
 
 pub struct ClassLoader {
 	class_path &ClassPath
@@ -11,23 +11,16 @@ mut:
 
 [inline]
 fn new_class_loader(class_path &ClassPath) ClassLoader {
-	return ClassLoader{
-		class_path,
-		{}
-	}
+	return ClassLoader{class_path, {}}
 }
 
 [inline]
 fn (mut loader ClassLoader) load_class(name string) !&Class {
-	return loader.class_map[name] or {
-		loader.load_non_array_class(name)!
-	}
+	return loader.class_map[name] or { loader.load_non_array_class(name)! }
 }
 
 fn (mut loader ClassLoader) load_non_array_class(name string) !&Class {
-	data, entry := loader.read_class(name) or {
-		return err
-	}
+	data, entry := loader.read_class(name) or { return err }
 	mut class := loader.define_class(data)
 	class.link()!
 	println('[Loaded $name from $entry]')
@@ -118,7 +111,7 @@ fn (mut class Class) calculate_static_field_slot_ids() {
 }
 
 fn (mut class Class) alloc_and_init_static_vars() ! {
-	class.static_vars := new_slots(class.static_slot_count)
+	class.static_vars = new_slots(class.static_slot_count)
 	for field in class.fields {
 		if field.is_static() && field.is_final() {
 			class.init_static_final_var(field) or {
@@ -136,7 +129,7 @@ fn (mut class Class) init_static_final_var(field &Field) ? {
 
 	if index > 0 {
 		match field.descriptor() {
-			"Z", "B", "C", "S", "I" {
+			'Z', 'B', 'C', 'S', 'I' {
 				vars.set<int>(pool.get<int>(index)?)
 			}
 			'J' {

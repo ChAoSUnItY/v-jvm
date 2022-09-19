@@ -22,7 +22,7 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 		return error('java.lang.IncompatibleClassChangeError')
 	}
 
-	if field.is_final() && (class != field_class || method.name() != "<clinit>") {
+	if field.is_final() && (class != field_class || method.name() != '<clinit>') {
 		return error('java.lang.IllegalAccessError')
 	}
 

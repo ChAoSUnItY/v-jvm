@@ -44,7 +44,7 @@ pub fn (mut inst ALOAD_3) execute(mut frame Frame) ! {
 }
 
 [inline]
-fn aload(mut frame Frame, index u32)  {
+fn aload(mut frame Frame, index u32) {
 	val := frame.local_vars().get_ref(index)
 	mut stack := frame.operand_stack()
 	return stack.push_ref(val)
