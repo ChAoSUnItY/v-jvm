@@ -33,20 +33,52 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 		'Z', 'B', 'C', 'S', 'I' {
 			val := stack.pop_int()
 			ref := stack.pop_ref()
+
+			if isnil(ref) {
+				return error('java.lang.NullPointerException')
+			}
 			
-			slots.set<int>(slot_id, stack.pop<int>()!)
+			ref.fields().set_int(slot_id, val)
 		}
 		'J' {
-			slots.set<i64>(slot_id, stack.pop<i64>()!)
+			val := stack.pop_i64()
+			ref := stack.pop_ref()
+			
+			if isnil(ref) {
+				return error('java.lang.NullPointerException')
+			}
+
+			ref.fields().set_i64(slot_id, val)
 		}
 		'F' {
-			slots.set<f32>(slot_id, stack.pop<f32>()!)
+			val := stack.pop_f32()
+			ref := stack.pop_ref()
+			
+			if isnil(ref) {
+				return error('java.lang.NullPointerException')
+			}
+
+			ref.fields().set_f32(slot_id, val)
 		}
 		'D' {
-			slots.set<f64>(slot_id, stack.pop<f64>()!)
+			val := stack.pop_f64()
+			ref := stack.pop_ref()
+
+			if isnil(ref) {
+				return error('java.lang.NullPointerException')
+			}
+			
+			ref.fields().set_f64(slot_id, val)
 		}
 		'L', '[' {
-			slots.set<Object>(slot_id, stack.pop<Object>()!)
+			val := stack.pop_ref()
+			ref := stack.pop_ref()
+
+			if isnil(ref) {
+				return error('java.lang.NullPointerException')
+			}
+			
+			ref.fields().set_ref(slot_id, val)
 		}
 		else {
 			// TODO
