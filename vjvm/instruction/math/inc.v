@@ -1,7 +1,7 @@
 module math
 
-import vjvm.rtda { Frame }
 import vjvm.instruction.base { BytecodeReader }
+import vjvm.rtda { Frame }
 
 pub struct IINC {
 pub mut:

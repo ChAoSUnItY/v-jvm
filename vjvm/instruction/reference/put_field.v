@@ -1,7 +1,8 @@
 module reference
 
 import vjvm.instruction.base { Index16Instruction }
-import vjvm.rtda.heap { FieldRef, Object }
+import vjvm.rtda { Frame }
+import vjvm.rtda.heap { FieldRef }
 
 pub struct PUT_STATIC {
 	Index16Instruction

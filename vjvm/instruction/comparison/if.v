@@ -1,7 +1,7 @@
 module comparison
 
-import vjvm.rtda { Frame }
 import vjvm.instruction.base { BranchInstruction, branch }
+import vjvm.rtda { Frame }
 
 pub struct IFEQ {
 	BranchInstruction

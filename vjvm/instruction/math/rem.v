@@ -1,8 +1,8 @@
 module math
 
 import math { mod }
-import vjvm.rtda { Frame }
 import vjvm.instruction.base { NoOperandInstruction }
+import vjvm.rtda { Frame }
 
 pub struct DREM {
 	NoOperandInstruction

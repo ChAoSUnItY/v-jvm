@@ -1,7 +1,7 @@
 module control
 
-import vjvm.rtda { Frame }
 import vjvm.instruction.base { BytecodeReader, branch }
+import vjvm.rtda { Frame }
 
 pub struct LOOKUP_SWITCH {
 mut:

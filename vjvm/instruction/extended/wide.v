@@ -1,10 +1,10 @@
 module extended
 
-import vjvm.rtda { Frame }
 import vjvm.instruction.base { BytecodeReader, Instruction, UninitializedInstruction }
 import vjvm.instruction.load { ALOAD, DLOAD, FLOAD, ILOAD, LLOAD }
 import vjvm.instruction.store { ASTORE, DSTORE, FSTORE, ISTORE, LSTORE }
 import vjvm.instruction.math { IINC }
+import vjvm.rtda { Frame }
 
 pub struct WIDE {
 mut:

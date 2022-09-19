@@ -1,7 +1,7 @@
 module extended
 
-import vjvm.rtda { Frame }
 import vjvm.instruction.base { BytecodeReader, branch }
+import vjvm.rtda { Frame }
 
 pub struct GOTO_W {
 mut:

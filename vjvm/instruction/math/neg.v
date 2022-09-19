@@ -1,7 +1,7 @@
 module math
-po<()
-import vjvm.rtda { Frame }
+
 import vjvm.instruction.base { NoOperandInstruction }
+import vjvm.rtda { Frame }
 
 pub struct DNEG {
 	NoOperandInstruction

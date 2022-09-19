@@ -1,7 +1,7 @@
 module load
 
-import vjvm.rtda { Frame }
 import vjvm.instruction.base { Index8Instruction, NoOperandInstruction }
+import vjvm.rtda { Frame }
 
 pub struct LLOAD {
 	Index8Instruction

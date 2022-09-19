@@ -1,7 +1,8 @@
 module reference
 
 import vjvm.instruction.base { Index16Instruction }
-import vjvm.rtda.heap { FieldRef, Object }
+import vjvm.rtda { Frame }
+import vjvm.rtda.heap { FieldRef }
 
 pub struct GET_STATIC {
 	Index16Instruction
@@ -11,7 +12,7 @@ pub fn (mut inst GET_STATIC) execute(mut frame Frame) ! {
 	method := frame.method()
 	class := method.class()
 	pool := class.constant_pool()
-	field_ref := pool.get<heap.FieldRef>(inst.index) or {
+	field_ref := pool.get<FieldRef>(inst.index) or {
 		return error('Unable to retrieve field ref from constant pool')
 	}
 	field := field_ref.resolve_field()!

@@ -1,7 +1,7 @@
 module stack
 
-import vjvm.rtda { Frame, Slot }
 import vjvm.instruction.base { NoOperandInstruction }
+import vjvm.rtda { Frame, Slot }
 
 // {val} -> {val, val}
 pub struct DUP {
