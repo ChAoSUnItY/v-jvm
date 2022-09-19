@@ -8,7 +8,7 @@ pub struct FSTORE {
 }
 
 pub fn (mut inst FSTORE) execute(mut frame Frame) ! {
-	store<f32>(mut frame, inst.index)!
+	fstore(mut frame, inst.index)!
 }
 
 pub struct FSTORE_0 {
@@ -16,7 +16,7 @@ pub struct FSTORE_0 {
 }
 
 pub fn (mut inst FSTORE_0) execute(mut frame Frame) ! {
-	store<f32>(mut frame, 0)!
+	fstore(mut frame, 0)!
 }
 
 pub struct FSTORE_1 {
@@ -24,7 +24,7 @@ pub struct FSTORE_1 {
 }
 
 pub fn (mut inst FSTORE_1) execute(mut frame Frame) ! {
-	store<f32>(mut frame, 1)!
+	fstore(mut frame, 1)!
 }
 
 pub struct FSTORE_2 {
@@ -32,7 +32,7 @@ pub struct FSTORE_2 {
 }
 
 pub fn (mut inst FSTORE_2) execute(mut frame Frame) ! {
-	store<f32>(mut frame, 2)!
+	fstore(mut frame, 2)!
 }
 
 pub struct FSTORE_3 {
@@ -40,5 +40,12 @@ pub struct FSTORE_3 {
 }
 
 pub fn (mut inst FSTORE_3) execute(mut frame Frame) ! {
-	store<f32>(mut frame, 3)!
+	fstore(mut frame, 3)!
+}
+
+fn fstore(mut frame Frame, index u32) {
+	mut stack := frame.operand_stack()
+	val := stack.pop_f32()
+	mut locals := frame.local_vars()
+	locals.set_f32(val, index)
 }
