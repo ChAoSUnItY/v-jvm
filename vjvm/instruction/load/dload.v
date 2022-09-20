@@ -47,5 +47,5 @@ pub fn (mut inst DLOAD_3) execute(mut frame Frame) ! {
 fn dload(mut frame Frame, index u32) {
 	val := frame.local_vars().get_f64(index)
 	mut stack := frame.operand_stack()
-	return stack.push_f64(val)
+	stack.push_f64(val)
 }

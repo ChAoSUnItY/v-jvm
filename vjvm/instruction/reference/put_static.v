@@ -18,7 +18,7 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 
 	if mut field_ref is FieldRef {
 		field := field_ref.resolve_field()!
-		field_class := field_ref.class()!
+		field_class := field_ref.class()
 
 		if !field.is_static() {
 			return error('java.lang.IncompatibleClassChangeError')
@@ -30,7 +30,7 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 
 		descriptor := field.descriptor()
 		slot_id := field.slot_id()
-		slots := field_class.static_vars()
+		slots := field_class.static_slots()
 		mut stack := frame.operand_stack()
 
 		match descriptor[0] {
@@ -46,7 +46,7 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 			`D` {
 				slots.set_f64(slot_id, stack.pop_f64()!)
 			}
-			`L`, '[' {
+			`L`, `[` {
 				slots.set_ref(slot_id, stack.pop_ref()!)
 			}
 			else {

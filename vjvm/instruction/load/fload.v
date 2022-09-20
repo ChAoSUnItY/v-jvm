@@ -47,5 +47,5 @@ pub fn (mut inst FLOAD_3) execute(mut frame Frame) ! {
 fn fload(mut frame Frame, index u32) {
 	val := frame.local_vars().get_f32(index)
 	mut stack := frame.operand_stack()
-	return stack.push_f32(val)
+	stack.push_f32(val)
 }

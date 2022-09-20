@@ -23,6 +23,6 @@ pub fn (mut inst NEW) execute(mut frame Frame) ! {
 
 		ref := class.new_object()
 		mut stack := frame.operand_stack()
-		stack.push_ref(*ref)
+		stack.push_ref(ref)
 	}
 }

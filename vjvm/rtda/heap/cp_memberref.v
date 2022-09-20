@@ -14,10 +14,10 @@ fn (mut ref MemberRef) copy_member_ref_info(info &ConstantClassMemberRefInfo) ! 
 	ref.name, ref.descriptor = info.name_and_descriptor()!
 }
 
-fn (ref &MemberRef) name() string {
+pub fn (ref &MemberRef) name() string {
 	return ref.name
 }
 
-fn (ref &MemberRef) descriptor() string {
+pub fn (ref &MemberRef) descriptor() string {
 	return ref.descriptor
 }

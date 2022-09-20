@@ -23,7 +23,7 @@ pub fn (mut inst INSTANCE_OF) execute(mut frame Frame) ! {
 	}
 
 	if mut class_ref is ClassRef {
-		class := class_ref.resolve_class()
+		class := class_ref.resolve_class()!
 
 		if ref.is_instance_of(class) {
 			stack.push_int(1)

@@ -23,6 +23,7 @@ pub fn (mut inst GET_FIELD) execute(mut frame Frame) ! {
 			return error('java.lang.IncompatibleClassChangeError')
 		}
 
+		mut stack := frame.operand_stack()
 		ref := stack.pop_ref()
 
 		if isnil(ref) {
@@ -32,7 +33,6 @@ pub fn (mut inst GET_FIELD) execute(mut frame Frame) ! {
 		descriptor := field.descriptor()
 		mut slots := ref.fields()
 		slot_id := field.slot_id()
-		mut stack := frame.operand_stack()
 
 		match descriptor[0] {
 			`Z`, `B`, `C`, `S`, `I` {
