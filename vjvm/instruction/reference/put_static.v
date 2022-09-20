@@ -30,24 +30,24 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 
 		descriptor := field.descriptor()
 		slot_id := field.slot_id()
-		slots := field_class.static_slots()
+		mut slots := field_class.static_slots()
 		mut stack := frame.operand_stack()
 
 		match descriptor[0] {
 			`Z`, `B`, `C`, `S`, `I` {
-				slots.set_int(slot_id, stack.pop_int()!)
+				slots.set_int(slot_id, stack.pop_int())
 			}
 			`J` {
-				slots.set_i64(slot_id, stack.pop_i64()!)
+				slots.set_i64(slot_id, stack.pop_i64())
 			}
 			`F` {
-				slots.set_f32(slot_id, stack.pop_f32()!)
+				slots.set_f32(slot_id, stack.pop_f32())
 			}
 			`D` {
-				slots.set_f64(slot_id, stack.pop_f64()!)
+				slots.set_f64(slot_id, stack.pop_f64())
 			}
 			`L`, `[` {
-				slots.set_ref(slot_id, stack.pop_ref()!)
+				slots.set_ref(slot_id, stack.pop_ref())
 			}
 			else {
 				// TODO

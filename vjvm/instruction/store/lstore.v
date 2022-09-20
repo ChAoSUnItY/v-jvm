@@ -8,7 +8,7 @@ pub struct LSTORE {
 }
 
 pub fn (mut inst LSTORE) execute(mut frame Frame) ! {
-	lstore(mut frame, inst.index)!
+	lstore(mut frame, inst.index)
 }
 
 pub struct LSTORE_0 {
@@ -16,7 +16,7 @@ pub struct LSTORE_0 {
 }
 
 pub fn (mut inst LSTORE_0) execute(mut frame Frame) ! {
-	lstore(mut frame, 0)!
+	lstore(mut frame, 0)
 }
 
 pub struct LSTORE_1 {
@@ -24,7 +24,7 @@ pub struct LSTORE_1 {
 }
 
 pub fn (mut inst LSTORE_1) execute(mut frame Frame) ! {
-	lstore(mut frame, 1)!
+	lstore(mut frame, 1)
 }
 
 pub struct LSTORE_2 {
@@ -32,7 +32,7 @@ pub struct LSTORE_2 {
 }
 
 pub fn (mut inst LSTORE_2) execute(mut frame Frame) ! {
-	lstore(mut frame, 2)!
+	lstore(mut frame, 2)
 }
 
 pub struct LSTORE_3 {
@@ -40,7 +40,7 @@ pub struct LSTORE_3 {
 }
 
 pub fn (mut inst LSTORE_3) execute(mut frame Frame) ! {
-	lstore(mut frame, 3)!
+	lstore(mut frame, 3)
 }
 
 fn lstore(mut frame Frame, index u32) {

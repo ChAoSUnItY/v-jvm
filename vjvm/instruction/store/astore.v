@@ -8,7 +8,7 @@ pub struct ASTORE {
 }
 
 pub fn (mut inst ASTORE) execute(mut frame Frame) ! {
-	astore(mut frame, inst.index)!
+	astore(mut frame, inst.index)
 }
 
 pub struct ASTORE_0 {
@@ -16,7 +16,7 @@ pub struct ASTORE_0 {
 }
 
 pub fn (mut inst ASTORE_0) execute(mut frame Frame) ! {
-	astore(mut frame, 0)!
+	astore(mut frame, 0)
 }
 
 pub struct ASTORE_1 {
@@ -24,7 +24,7 @@ pub struct ASTORE_1 {
 }
 
 pub fn (mut inst ASTORE_1) execute(mut frame Frame) ! {
-	astore(mut frame, 1)!
+	astore(mut frame, 1)
 }
 
 pub struct ASTORE_2 {
@@ -32,7 +32,7 @@ pub struct ASTORE_2 {
 }
 
 pub fn (mut inst ASTORE_2) execute(mut frame Frame) ! {
-	astore(mut frame, 2)!
+	astore(mut frame, 2)
 }
 
 pub struct ASTORE_3 {
@@ -40,7 +40,7 @@ pub struct ASTORE_3 {
 }
 
 pub fn (mut inst ASTORE_3) execute(mut frame Frame) ! {
-	astore(mut frame, 3)!
+	astore(mut frame, 3)
 }
 
 fn astore(mut frame Frame, index u32) {

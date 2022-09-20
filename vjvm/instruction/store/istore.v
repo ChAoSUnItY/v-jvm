@@ -8,7 +8,7 @@ pub struct ISTORE {
 }
 
 pub fn (mut inst ISTORE) execute(mut frame Frame) ! {
-	istore(mut frame, inst.index)!
+	istore(mut frame, inst.index)
 }
 
 pub struct ISTORE_0 {
@@ -16,7 +16,7 @@ pub struct ISTORE_0 {
 }
 
 pub fn (mut inst ISTORE_0) execute(mut frame Frame) ! {
-	istore(mut frame, 0)!
+	istore(mut frame, 0)
 }
 
 pub struct ISTORE_1 {
@@ -24,7 +24,7 @@ pub struct ISTORE_1 {
 }
 
 pub fn (mut inst ISTORE_1) execute(mut frame Frame) ! {
-	istore(mut frame, 1)!
+	istore(mut frame, 1)
 }
 
 pub struct ISTORE_2 {
@@ -32,7 +32,7 @@ pub struct ISTORE_2 {
 }
 
 pub fn (mut inst ISTORE_2) execute(mut frame Frame) ! {
-	istore(mut frame, 2)!
+	istore(mut frame, 2)
 }
 
 pub struct ISTORE_3 {
@@ -40,7 +40,7 @@ pub struct ISTORE_3 {
 }
 
 pub fn (mut inst ISTORE_3) execute(mut frame Frame) ! {
-	istore(mut frame, 3)!
+	istore(mut frame, 3)
 }
 
 fn istore(mut frame Frame, index u32) {

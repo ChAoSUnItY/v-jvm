@@ -4,11 +4,11 @@ import vjvm.instruction.base { Index16Instruction }
 import vjvm.rtda { Frame }
 import vjvm.rtda.heap { ClassRef }
 
-pub struct CHECKCAST {
+pub struct CHECK_CAST {
 	Index16Instruction
 }
 
-pub fn (mut inst CHECKCAST) execute(mut frame Frame) ! {
+pub fn (mut inst CHECK_CAST) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
 	ref := stack.pop_ref()
 

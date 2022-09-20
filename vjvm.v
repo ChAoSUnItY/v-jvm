@@ -1,9 +1,8 @@
 module main
 
-import vjvm
+import vjvm { interpret }
 import vjvm.entry { parse_cp }
 import vjvm.cmd { Cmd, parse_cmd }
-import vjvm.instruction.interpreter { interpret }
 import vjvm.rtda.heap { new_class_loader }
 
 fn main() {
@@ -26,11 +25,11 @@ fn main() {
 
 fn start_jvm(cmd &Cmd) ! {
 	class_path := parse_cp(cmd.x_jre_option, cmd.cp_option)!
-	loader := new_class_loader(class_path)
+	mut loader := new_class_loader(class_path)
 	class_name := cmd.class_name.replace('.', '/')
-	class := loader.load_class(class_name)
+	class := loader.load_class(class_name)!
 	main_method := class.main_method() or {
-		return error('Main method not found in class $cmd.class')
+		return error('Main method not found in class $cmd.class_name')
 	}
-	interpret(main_method)
+	interpret(main_method)!
 }

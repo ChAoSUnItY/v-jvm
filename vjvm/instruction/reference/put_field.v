@@ -31,57 +31,61 @@ pub fn (mut inst PUT_FIELD) execute(mut frame Frame) ! {
 		descriptor := field.descriptor()
 		slot_id := field.slot_id()
 		mut stack := frame.operand_stack()
-		mut fields := field_class.fields()
 
 		match descriptor[0] {
 			`Z`, `B`, `C`, `S`, `I` {
 				val := stack.pop_int()
-				ref := stack.pop_ref()
+				mut ref := stack.pop_ref()
 
 				if isnil(ref) {
 					return error('java.lang.NullPointerException')
 				}
 
+				mut fields := ref.fields()
 				fields.set_int(slot_id, val)
 			}
 			`J` {
 				val := stack.pop_i64()
-				ref := stack.pop_ref()
+				mut ref := stack.pop_ref()
 
 				if isnil(ref) {
 					return error('java.lang.NullPointerException')
 				}
 
+				mut fields := ref.fields()
 				fields.set_i64(slot_id, val)
 			}
 			`F` {
 				val := stack.pop_f32()
-				ref := stack.pop_ref()
+				mut ref := stack.pop_ref()
 
 				if isnil(ref) {
 					return error('java.lang.NullPointerException')
 				}
 
+				mut fields := ref.fields()
 				fields.set_f32(slot_id, val)
 			}
 			`D` {
 				val := stack.pop_f64()
-				ref := stack.pop_ref()
+				mut ref := stack.pop_ref()
 
 				if isnil(ref) {
 					return error('java.lang.NullPointerException')
 				}
 
+				mut fields := ref.fields()
 				fields.set_f64(slot_id, val)
 			}
 			`L`, `[` {
 				val := stack.pop_ref()
-				ref := stack.pop_ref()
+				mut ref := stack.pop_ref()
 
 				if isnil(ref) {
 					return error('java.lang.NullPointerException')
 				}
 
+				mut fields := ref.fields()
 				fields.set_ref(slot_id, val)
 			}
 			else {

@@ -15,7 +15,7 @@ pub fn new_class_loader(class_path &ClassPath) ClassLoader {
 }
 
 [inline]
-fn (mut loader ClassLoader) load_class(name string) !&Class {
+pub fn (mut loader ClassLoader) load_class(name string) !&Class {
 	return loader.class_map[name] or { loader.load_non_array_class(name)! }
 }
 
@@ -29,7 +29,7 @@ fn (mut loader ClassLoader) load_non_array_class(name string) !&Class {
 
 fn (mut loader ClassLoader) read_class(name string) !([]u8, &entry.Entry) {
 	return loader.class_path.read_class(name) or {
-		error('java.lang.ClassNotFoundException: $name')
+		return error('java.lang.ClassNotFoundException: $name')
 	}
 }
 
@@ -83,7 +83,7 @@ fn (mut class Class) calculate_instance_slot_ids() {
 		slot_id = class.super_class.instance_slot_count
 	}
 	for mut field in class.fields {
-		if !field.is_static() {
+		if !field.ClassMember.Access.is_static() {
 			field.slot_id = slot_id
 			if field.is_long_or_double() {
 				slot_id += 2
@@ -98,7 +98,7 @@ fn (mut class Class) calculate_instance_slot_ids() {
 fn (mut class Class) calculate_static_field_slot_ids() {
 	mut slot_id := u32(0)
 	for mut field in class.fields {
-		if field.is_static() {
+		if field.ClassMember.Access.is_static() {
 			field.slot_id = slot_id
 			if field.is_long_or_double() {
 				slot_id += 2

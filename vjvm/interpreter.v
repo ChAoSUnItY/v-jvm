@@ -1,21 +1,16 @@
-module interpreter
+module vjvm
 
 import vjvm.instruction { new_instruction }
 import vjvm.instruction.base { BytecodeReader }
 import vjvm.classfile { MemberInfo }
 import vjvm.rtda { Frame, Thread, new_thread }
+import vjvm.rtda.heap { Method }
 
-pub fn interpret(info MemberInfo) ! {
-	code := info.code_attr() or {
-		return error('Member ${info.name()!} does not have code attribute')
-	}
-	max_locals := code.max_locals()
-	max_stack := code.max_stack()
-	bytecode := code.code()
+pub fn interpret(method &Method) ! {
 	mut thread := new_thread()
-	mut frame := thread.new_frame(max_locals, max_stack)
+	mut frame := thread.new_frame(method)
 	thread.push_frame(mut frame)! // Enter frame
-	loop(mut thread, bytecode) or { catch_err(err, frame) }
+	loop(mut thread, method.code()) or { catch_err(err, frame) }
 }
 
 fn loop(mut thread Thread, bytecode []byte) ! {
