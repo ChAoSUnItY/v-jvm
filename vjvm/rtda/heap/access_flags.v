@@ -21,7 +21,7 @@ const (
 	acc_enum         = 0x4000 // class field
 )
 
-interface Access {
+struct Access {
 mut:
 	access_flags u16
 }

@@ -5,7 +5,7 @@ import vjvm.rtda.heap { Method }
 pub struct Frame {
 mut:
 	local_vars    LocalVars
-	opreand_stack &OperandStack
+	operand_stack &OperandStack
 	lower         &Frame
 	thread        &Thread
 	method        &heap.Method
@@ -18,7 +18,7 @@ pub fn (thread &Thread) new_frame(method &Method) Frame {
 		operand_stack: new_operand_stack(method.max_stack())
 		lower: unsafe { nil }
 		thread: unsafe { thread }
-		method: method
+		method: unsafe { method }
 	}
 }
 
@@ -27,7 +27,7 @@ pub fn (frame &Frame) local_vars() LocalVars {
 }
 
 pub fn (frame &Frame) operand_stack() &OperandStack {
-	return frame.opreand_stack
+	return frame.operand_stack
 }
 
 pub fn (frame &Frame) thread() &Thread {

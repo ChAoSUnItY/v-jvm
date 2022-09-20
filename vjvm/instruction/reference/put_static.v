@@ -12,43 +12,46 @@ pub fn (mut inst PUT_STATIC) execute(mut frame Frame) ! {
 	method := frame.method()
 	class := method.class()
 	pool := class.constant_pool()
-	field_ref := pool.get<FieldRef>(inst.index) or {
+	mut field_ref := pool.get_constant(inst.index) or {
 		return error('Unable to retrieve field ref from constant pool')
 	}
-	field := field_ref.resolve_field()!
-	field_class := field_ref.class()!
 
-	if !field.is_static() {
-		return error('java.lang.IncompatibleClassChangeError')
-	}
+	if mut field_ref is FieldRef {
+		field := field_ref.resolve_field()!
+		field_class := field_ref.class()!
 
-	if field.is_final() && (class != field_class || method.name() != '<clinit>') {
-		return error('java.lang.IllegalAccessError')
-	}
+		if !field.is_static() {
+			return error('java.lang.IncompatibleClassChangeError')
+		}
 
-	descriptor := field.descriptor()
-	slot_id := field.slot_id()
-	slots := field_class.static_vars()
-	mut stack := frame.operand_stack()
+		if field.is_final() && (class != field_class || method.name() != '_clinit') {
+			return error('java.lang.IllegalAccessError')
+		}
 
-	match descriptor[0] {
-		'Z', 'B', 'C', 'S', 'I' {
-			slots.set<int>(slot_id, stack.pop<int>()!)
-		}
-		'J' {
-			slots.set<i64>(slot_id, stack.pop<i64>()!)
-		}
-		'F' {
-			slots.set<f32>(slot_id, stack.pop<f32>()!)
-		}
-		'D' {
-			slots.set<f64>(slot_id, stack.pop<f64>()!)
-		}
-		'L', '[' {
-			slots.set<Object>(slot_id, stack.pop<Object>()!)
-		}
-		else {
-			// TODO
+		descriptor := field.descriptor()
+		slot_id := field.slot_id()
+		slots := field_class.static_vars()
+		mut stack := frame.operand_stack()
+
+		match descriptor[0] {
+			`Z`, `B`, `C`, `S`, `I` {
+				slots.set_int(slot_id, stack.pop_int()!)
+			}
+			`J` {
+				slots.set_i64(slot_id, stack.pop_i64()!)
+			}
+			`F` {
+				slots.set_f32(slot_id, stack.pop_f32()!)
+			}
+			`D` {
+				slots.set_f64(slot_id, stack.pop_f64()!)
+			}
+			`L`, '[' {
+				slots.set_ref(slot_id, stack.pop_ref()!)
+			}
+			else {
+				// TODO
+			}
 		}
 	}
 }

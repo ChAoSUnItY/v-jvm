@@ -7,7 +7,7 @@ attribute_info {
     u1 info[attribute_length];
 }
 */
-interface AttributeInfo {
+pub interface AttributeInfo {
 mut:
 	read_info(mut reader ClassReader) !
 }
@@ -34,7 +34,7 @@ fn new_attribute_info(attr_name string, attr_len u32, pool &ConstantPool) Attrib
 	return match attr_name {
 		'Code' {
 			AttributeInfo(CodeAttribute{
-				pool: pool
+				pool: unsafe { pool }
 			})
 		}
 		'Deprecated' {
@@ -57,7 +57,7 @@ fn new_attribute_info(attr_name string, attr_len u32, pool &ConstantPool) Attrib
 		}
 		'SourceFile' {
 			AttributeInfo(SourceFileAttribute{
-				pool: pool
+				pool: unsafe { pool }
 			})
 		}
 		else {
@@ -69,7 +69,7 @@ fn new_attribute_info(attr_name string, attr_len u32, pool &ConstantPool) Attrib
 	}
 }
 
-struct MarkerAttribute {}
+pub struct MarkerAttribute {}
 
 fn (mut attr MarkerAttribute) read_info(mut reader ClassReader) ! {}
 
@@ -79,7 +79,7 @@ Deprecated_attribute {
     u4 attribute_length;
 }
 */
-struct DeprecatedAttribute {
+pub struct DeprecatedAttribute {
 	MarkerAttribute
 }
 
@@ -89,7 +89,7 @@ Synthetic_attribute {
     u4 attribute_length;
 }
 */
-struct SyntheticAttribute {
+pub struct SyntheticAttribute {
 	MarkerAttribute
 }
 
@@ -100,7 +100,7 @@ SourceFile_attribute {
     u2 sourcefile_index;
 }
 */
-struct SourceFileAttribute {
+pub struct SourceFileAttribute {
 	pool &ConstantPool [required]
 mut:
 	source_file_index u16
@@ -110,7 +110,7 @@ fn (mut attr SourceFileAttribute) read_info(mut reader ClassReader) ! {
 	attr.source_file_index = reader.read_u16()
 }
 
-fn (attr &SourceFileAttribute) file_name() !string {
+pub fn (attr &SourceFileAttribute) file_name() !string {
 	return attr.pool.get_utf8(attr.source_file_index)!
 }
 
@@ -125,7 +125,7 @@ BootstrapMethods_attribute {
     } bootstrap_methods[num_bootstrap_methods];
 }
 */
-struct BootstrapMethodsAttribute {
+pub struct BootstrapMethodsAttribute {
 mut:
 	bootstrap_methods []BootstrapMethod = []BootstrapMethod{}
 }
@@ -141,7 +141,7 @@ fn (mut attr BootstrapMethodsAttribute) read_info(mut reader ClassReader) ! {
 	}
 }
 
-struct BootstrapMethod {
+pub struct BootstrapMethod {
 	bootstrap_method_ref u16
 	bootstrap_arguments  []u16
 }
@@ -154,7 +154,7 @@ EnclosingMethod_attribute {
     u2 method_index;
 }
 */
-struct EnclosingMethodAttribute {
+pub struct EnclosingMethodAttribute {
 	pool &ConstantPool [required]
 mut:
 	class_index  u16
@@ -166,11 +166,11 @@ fn (mut attr EnclosingMethodAttribute) read_info(mut reader ClassReader) ! {
 	attr.method_index = reader.read_u16()
 }
 
-fn (attr &EnclosingMethodAttribute) class_name() !string {
+pub fn (attr &EnclosingMethodAttribute) class_name() !string {
 	return attr.pool.get_class_name(attr.class_index)!
 }
 
-fn (attr &EnclosingMethodAttribute) method_name_and_descriptor(mut reader ClassReader) !(string, string) {
+pub fn (attr &EnclosingMethodAttribute) method_name_and_descriptor(mut reader ClassReader) !(string, string) {
 	if attr.method_index > 0 {
 		return attr.pool.get_name_and_type(attr.method_index)!
 	} else {
@@ -188,7 +188,7 @@ LineNumberTable_attribute {
     } line_number_table[line_number_table_length];
 }
 */
-struct LineNumberTableAttribute {
+pub struct LineNumberTableAttribute {
 mut:
 	line_number_table []LineNumberTableEntry = []LineNumberTableEntry{}
 }
@@ -204,7 +204,7 @@ fn (mut attr LineNumberTableAttribute) read_info(mut reader ClassReader) ! {
 	}
 }
 
-fn (attr &LineNumberTableAttribute) get_line_number(pc int) int {
+pub fn (attr &LineNumberTableAttribute) get_line_number(pc int) int {
 	for i := attr.line_number_table.len - 1; i >= 0; i-- {
 		entry := attr.line_number_table[i]
 
@@ -215,7 +215,7 @@ fn (attr &LineNumberTableAttribute) get_line_number(pc int) int {
 	return -1
 }
 
-struct LineNumberTableEntry {
+pub struct LineNumberTableEntry {
 	start_pc    u16
 	line_number u16
 }
@@ -233,7 +233,7 @@ LocalVariableTable_attribute {
     } local_variable_table[local_variable_table_length];
 }
 */
-struct LocalVariableTableAttribute {
+pub struct LocalVariableTableAttribute {
 mut:
 	local_variable_table []LocalVariableTableEntry = []LocalVariableTableEntry{}
 }
@@ -252,7 +252,7 @@ fn (mut attr LocalVariableTableAttribute) read_info(mut reader ClassReader) ! {
 	}
 }
 
-struct LocalVariableTableEntry {
+pub struct LocalVariableTableEntry {
 	start_pc         u16
 	length           u16
 	name_index       u16
@@ -273,7 +273,7 @@ LocalVariableTypeTable_attribute {
     } local_variable_type_table[local_variable_type_table_length];
 }
 */
-struct LocalVariableTypeTableAttribute {
+pub struct LocalVariableTypeTableAttribute {
 mut:
 	local_variable_type_table []LocalVariableTypeTableEntry = []LocalVariableTypeTableEntry{}
 }
@@ -292,7 +292,7 @@ fn (mut attr LocalVariableTypeTableAttribute) read_info(mut reader ClassReader) 
 	}
 }
 
-struct LocalVariableTypeTableEntry {
+pub struct LocalVariableTypeTableEntry {
 	start_pc        u16
 	length          u16
 	name_index      u16
@@ -312,7 +312,7 @@ InnerClasses_attribute {
     } classes[number_of_classes];
 }
 */
-struct InnerClassesAttribute {
+pub struct InnerClassesAttribute {
 mut:
 	classes []InnerClassInfo = []InnerClassInfo{}
 }
@@ -330,7 +330,7 @@ fn (mut attr InnerClassesAttribute) read_info(mut reader ClassReader) ! {
 	}
 }
 
-struct InnerClassInfo {
+pub struct InnerClassInfo {
 	inner_class_info_index   u16
 	outer_class_info_index   u16
 	inner_name_index         u16
@@ -345,7 +345,7 @@ Exceptions_attribute {
     u2 exception_index_table[number_of_exceptions];
 }
 */
-struct ExceptionAttribute {
+pub struct ExceptionAttribute {
 mut:
 	exception_index_table []u16 = []u16{}
 }
@@ -365,7 +365,7 @@ ConstantValue_attribute {
     u2 constantvalue_index;
 }
 */
-struct ConstantValueAttribute {
+pub struct ConstantValueAttribute {
 mut:
 	constant_value_index u16
 }
@@ -374,7 +374,7 @@ fn (mut attr ConstantValueAttribute) read_info(mut reader ClassReader) ! {
 	attr.constant_value_index = reader.read_u16()
 }
 
-fn (attr &ConstantValueAttribute) index() u16 {
+pub fn (attr &ConstantValueAttribute) index() u16 {
 	return attr.constant_value_index
 }
 
@@ -396,7 +396,7 @@ Code_attribute {
     attribute_info attributes[attributes_count];
 }
 */
-struct CodeAttribute {
+pub struct CodeAttribute {
 	pool &ConstantPool [required]
 mut:
 	max_stack       u16
@@ -418,7 +418,7 @@ pub fn (attr &CodeAttribute) code() []u8 {
 	return attr.code
 }
 
-struct ExceptionTableEntry {
+pub struct ExceptionTableEntry {
 	start_pc   u16
 	end_pc     u16
 	handler_pc u16
@@ -434,7 +434,7 @@ fn (mut attr CodeAttribute) read_info(mut reader ClassReader) ! {
 	attr.attributes = reader.read_attributes(attr.pool)!
 }
 
-fn (mut reader ClassReader) read_exception_table() []ExceptionTableEntry {
+pub fn (mut reader ClassReader) read_exception_table() []ExceptionTableEntry {
 	len := int(reader.read_u16())
 	mut table := []ExceptionTableEntry{cap: len}
 	for _ in 0 .. len {
@@ -450,7 +450,7 @@ Signature_attribute {
     u2 signature_index;
 }
 */
-struct SignatureAttribute {
+pub struct SignatureAttribute {
 	pool &ConstantPool [required]
 mut:
 	signature_index u16
@@ -460,7 +460,7 @@ fn (mut attr SignatureAttribute) read_info(mut reader ClassReader) ! {
 	attr.signature_index = reader.read_u16()
 }
 
-fn (attr &SignatureAttribute) signature() !string {
+pub fn (attr &SignatureAttribute) signature() !string {
 	return attr.pool.get_utf8(attr.signature_index)!
 }
 
@@ -471,7 +471,7 @@ attribute_info {
     u1 info[attribute_length];
 }
 */
-struct UnparsedAttribute {
+pub struct UnparsedAttribute {
 mut:
 	name string [required]
 	len  u32    [required]
@@ -482,6 +482,6 @@ fn (mut attr UnparsedAttribute) read_info(mut reader ClassReader) ! {
 	attr.info = reader.read_u8_array(attr.len)
 }
 
-fn (attr &UnparsedAttribute) info() []u8 {
+pub fn (attr &UnparsedAttribute) info() []u8 {
 	return attr.info
 }

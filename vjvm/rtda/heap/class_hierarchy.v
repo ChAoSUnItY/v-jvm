@@ -4,8 +4,7 @@ module heap
 fn (class &Class) is_assignable_from(other &Class) bool {
 	return if class == other {
 		true
-	}
-	if !class.is_interface() {
+	} else if !class.is_interface() {
 		class.is_sub_class_of(other)
 	} else {
 		class.implements(other)

@@ -24,7 +24,7 @@ fn (mut reader ClassReader) read_member(pool &ConstantPool) !MemberInfo {
 	name_index := reader.read_u16()
 	descriptor_index := reader.read_u16()
 	attributes := reader.read_attributes(pool)!
-	return MemberInfo{pool, access_flags, name_index, descriptor_index, attributes}
+	return MemberInfo{unsafe { pool }, access_flags, name_index, descriptor_index, attributes}
 }
 
 pub fn (info &MemberInfo) access_flags() u16 {

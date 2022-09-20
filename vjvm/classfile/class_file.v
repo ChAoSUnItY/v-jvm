@@ -24,7 +24,7 @@ pub struct ClassFile {
 mut:
 	minor_version u16
 	major_version u16
-	pool          ConstantPool = ConstantPool{}
+	pool          ConstantPool
 	access_flags  u16
 	this_class    u16
 	super_class   u16
@@ -88,7 +88,7 @@ pub fn (cf &ClassFile) major_version() u16 {
 	return cf.major_version
 }
 
-pub fn (cf &ClassFile) pool() &ConstantPool {
+pub fn (cf &ClassFile) constant_pool() &ConstantPool {
 	return &cf.pool
 }
 
@@ -96,15 +96,15 @@ pub fn (cf &ClassFile) access_flags() u16 {
 	return cf.access_flags
 }
 
-pub fn (cf &ClassFile) this_class() !string {
+pub fn (cf &ClassFile) name() !string {
 	return cf.pool.get_class_name(cf.this_class)!
 }
 
-pub fn (cf &ClassFile) super_class() !string {
+pub fn (cf &ClassFile) super_class_name() !string {
 	return cf.pool.get_class_name(cf.super_class)!
 }
 
-pub fn (cf &ClassFile) interfaces() ![]string {
+pub fn (cf &ClassFile) interface_names() ![]string {
 	return cf.interfaces.map(cf.pool.get_class_name(it)!)
 }
 

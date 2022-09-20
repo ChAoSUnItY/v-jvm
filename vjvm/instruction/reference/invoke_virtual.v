@@ -10,38 +10,40 @@ pub struct INVOKE_VIRTUAL {
 
 pub fn (mut inst INVOKE_VIRTUAL) execute(mut frame Frame) ! {
 	pool := frame.method().class().constant_pool()
-	method_ref := pool.get<MethodRef>(inst.index) or {
+	mut method_ref := pool.get_constant(inst.index) or {
 		return error('Unable to retrieve method ref from constant pool')
 	}
 
 	// FIXME: hack
-	if method_ref.name() == 'println' {
-		mut stack := frame.operand_stack()
+	if mut method_ref is MethodRef {
+		if method_ref.name() == 'println' {
+			mut stack := frame.operand_stack()
 
-		match method_ref.descriptor() {
-			'(Z)V' {
-				println('${stack.pop_int() != 0}')
+			match method_ref.descriptor() {
+				'(Z)V' {
+					println('${stack.pop_int() != 0}')
+				}
+				'(C)V' {
+					println('${rune(stack.pop_int())}')
+				}
+				'(I)V' {
+					println('$stack.pop_int()')
+				}
+				'(F)V' {
+					println('$stack.pop_f32()')
+				}
+				'(J)V' {
+					println('$stack.pop_i64()')
+				}
+				'(D)V' {
+					println('$stack.pop_f64()')
+				}
+				else {
+					return error('println: `$method_ref.descriptor()`')
+				}
 			}
-			'(C)V' {
-				println('${rune(stack.pop_int())}')
-			}
-			'(I)V' {
-				println('$stack.pop_int()')
-			}
-			'(F)V' {
-				println('$stack.pop_f32()')
-			}
-			'(J)V' {
-				println('$stack.pop_i64()')
-			}
-			'(D)V' {
-				println('$stack.pop_f64()')
-			}
-			else {
-				return error('println: `$method_ref.descriptor()`')
-			}
+
+			stack.pop_ref()
 		}
-
-		stack.pop_ref()
 	}
 }

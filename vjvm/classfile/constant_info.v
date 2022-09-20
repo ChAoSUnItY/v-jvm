@@ -25,7 +25,7 @@ cp_info {
     u1 info[];
 }
 */
-interface ConstantInfo {
+pub interface ConstantInfo {
 mut:
 	read_info(mut ClassReader) !
 }
@@ -41,27 +41,27 @@ fn new_constant_info(tag u8, pool &ConstantPool) !ConstantInfo {
 	match tag {
 		classfile.constant_class {
 			return ConstantInfo(ConstantClassInfo{
-				pool: pool
+				pool: unsafe { pool }
 			})
 		}
 		classfile.constant_fieldref {
 			return ConstantInfo(ConstantFieldRefInfo{
-				pool: pool
+				pool: unsafe { pool }
 			})
 		}
 		classfile.constant_methodref {
 			return ConstantInfo(ConstantMethodRefInfo{
-				pool: pool
+				pool: unsafe { pool }
 			})
 		}
 		classfile.constant_interface_methodref {
 			return ConstantInfo(ConstantInterfaceRefInfo{
-				pool: pool
+				pool: unsafe { pool }
 			})
 		}
 		classfile.constant_string {
 			return ConstantInfo(ConstantStringInfo{
-				pool: pool
+				pool: unsafe { pool }
 			})
 		}
 		classfile.constant_integer {
@@ -103,7 +103,7 @@ CONSTANT_Class_info {
     u2 name_index;
 }
 */
-struct ConstantClassInfo {
+pub struct ConstantClassInfo {
 	pool &ConstantPool [required]
 mut:
 	name_index u16
@@ -113,7 +113,7 @@ fn (mut info ConstantClassInfo) read_info(mut reader ClassReader) ! {
 	info.name_index = reader.read_u16()
 }
 
-fn (info &ConstantClassInfo) class_name() !string {
+pub fn (info &ConstantClassInfo) class_name() !string {
 	return info.pool.get_utf8(info.name_index)
 }
 
@@ -124,7 +124,7 @@ CONSTANT_MethodHandle_info {
     u2 reference_index;
 }
 */
-struct ConstantMethodHandleInfo {
+pub struct ConstantMethodHandleInfo {
 mut:
 	reference_kind  u8
 	reference_index u16
@@ -141,7 +141,7 @@ CONSTANT_MethodType_info {
     u2 descriptor_index;
 }
 */
-struct ConstantMethodTypeInfo {
+pub struct ConstantMethodTypeInfo {
 mut:
 	descriptor_index u16
 }
@@ -157,7 +157,7 @@ CONSTANT_InvokeDynamic_info {
     u2 name_and_type_index;
 }
 */
-struct ConstantInvokeDynamicInfo {
+pub struct ConstantInvokeDynamicInfo {
 mut:
 	bootstrap_method_attr_index u16
 	name_and_type_index         u16
@@ -185,19 +185,19 @@ CONSTANT_InterfaceMethodref_info {
     u2 name_and_type_index;
 }
 */
-struct ConstantFieldRefInfo {
+pub struct ConstantFieldRefInfo {
 	ConstantClassMemberRefInfo
 }
 
-struct ConstantMethodRefInfo {
+pub struct ConstantMethodRefInfo {
 	ConstantClassMemberRefInfo
 }
 
-struct ConstantInterfaceRefInfo {
+pub struct ConstantInterfaceRefInfo {
 	ConstantClassMemberRefInfo
 }
 
-struct ConstantClassMemberRefInfo {
+pub struct ConstantClassMemberRefInfo {
 	pool &ConstantPool [required]
 mut:
 	class_index         u16
@@ -209,11 +209,11 @@ fn (mut info ConstantClassMemberRefInfo) read_info(mut reader ClassReader) ! {
 	info.name_and_type_index = reader.read_u16()
 }
 
-fn (info &ConstantClassMemberRefInfo) class_name() !string {
+pub fn (info &ConstantClassMemberRefInfo) class_name() !string {
 	return info.pool.get_class_name(info.class_index)
 }
 
-fn (info &ConstantClassMemberRefInfo) name_and_descriptor() !(string, string) {
+pub fn (info &ConstantClassMemberRefInfo) name_and_descriptor() !(string, string) {
 	return info.pool.get_name_and_type(info.name_and_type_index)
 }
 
@@ -224,7 +224,7 @@ CONSTANT_NameAndType_info {
     u2 descriptor_index;
 }
 */
-struct ConstantNameAndTypeInfo {
+pub struct ConstantNameAndTypeInfo {
 mut:
 	name_index       u16
 	descriptor_index u16
@@ -241,7 +241,7 @@ CONSTANT_Integer_info {
     u4 bytes;
 }
 */
-struct ConstantIntegerInfo {
+pub struct ConstantIntegerInfo {
 mut:
 	val int
 }
@@ -250,7 +250,7 @@ fn (mut info ConstantIntegerInfo) read_info(mut reader ClassReader) ! {
 	info.val = int(reader.read_u32())
 }
 
-fn (info &ConstantIntegerInfo) value() int {
+pub fn (info &ConstantIntegerInfo) value() int {
 	return info.val
 }
 
@@ -260,7 +260,7 @@ CONSTANT_Float_info {
     u4 bytes;
 }
 */
-struct ConstantFloatInfo {
+pub struct ConstantFloatInfo {
 mut:
 	val f32
 }
@@ -269,7 +269,7 @@ fn (mut info ConstantFloatInfo) read_info(mut reader ClassReader) ! {
 	info.val = f32_from_bits(reader.read_u32())
 }
 
-fn (info &ConstantFloatInfo) value() f32 {
+pub fn (info &ConstantFloatInfo) value() f32 {
 	return info.val
 }
 
@@ -280,7 +280,7 @@ CONSTANT_Long_info {
     u4 low_bytes;
 }
 */
-struct ConstantLongInfo {
+pub struct ConstantLongInfo {
 mut:
 	val i64
 }
@@ -289,7 +289,7 @@ fn (mut info ConstantLongInfo) read_info(mut reader ClassReader) ! {
 	info.val = i64(reader.read_u64())
 }
 
-fn (info &ConstantLongInfo) value() i64 {
+pub fn (info &ConstantLongInfo) value() i64 {
 	return info.val
 }
 
@@ -300,7 +300,7 @@ CONSTANT_Double_info {
     u4 low_bytes;
 }
 */
-struct ConstantDoubleInfo {
+pub struct ConstantDoubleInfo {
 mut:
 	val f64
 }
@@ -309,7 +309,7 @@ fn (mut info ConstantDoubleInfo) read_info(mut reader ClassReader) ! {
 	info.val = f64_from_bits(reader.read_u64())
 }
 
-fn (info &ConstantDoubleInfo) value() f64 {
+pub fn (info &ConstantDoubleInfo) value() f64 {
 	return info.val
 }
 
@@ -319,7 +319,7 @@ CONSTANT_String_info {
     u2 string_index;
 }
 */
-struct ConstantStringInfo {
+pub struct ConstantStringInfo {
 	pool &ConstantPool [required]
 mut:
 	string_index u16
@@ -329,7 +329,7 @@ fn (mut info ConstantStringInfo) read_info(mut reader ClassReader) ! {
 	info.string_index = reader.read_u16()
 }
 
-fn (info &ConstantStringInfo) string() !string {
+pub fn (info &ConstantStringInfo) string() !string {
 	return info.pool.get_utf8(info.string_index)
 }
 
@@ -340,7 +340,7 @@ CONSTANT_Utf8_info {
     u1 bytes[length];
 }
 */
-struct ConstantUtf8Info {
+pub struct ConstantUtf8Info {
 mut:
 	str string
 }
@@ -351,7 +351,7 @@ fn (mut info ConstantUtf8Info) read_info(mut reader ClassReader) ! {
 	info.str = decode_mutf8(bytes)!
 }
 
-fn (info &ConstantUtf8Info) str() string {
+pub fn (info &ConstantUtf8Info) str() string {
 	return info.str
 }
 

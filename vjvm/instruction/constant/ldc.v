@@ -27,7 +27,7 @@ pub struct LDC2_W {
 pub fn (mut inst LDC2_W) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
 	pool := frame.method().class().constant_pool()
-	constant := pool.get_constant() or {
+	constant := pool.get_constant(inst.index) or {
 		return error('Unable to retrieve constant from constant pool')
 	}
 
@@ -47,7 +47,7 @@ pub fn (mut inst LDC2_W) execute(mut frame Frame) ! {
 fn ldc(mut frame Frame, index u32) ! {
 	mut stack := frame.operand_stack()
 	pool := frame.method().class().constant_pool()
-	constant := pool.get_constant() or {
+	constant := pool.get_constant(index) or {
 		return error('Unable to retrieve constant from constant pool')
 	}
 

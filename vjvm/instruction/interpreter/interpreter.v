@@ -11,7 +11,7 @@ pub fn interpret(info MemberInfo) ! {
 	}
 	max_locals := code.max_locals()
 	max_stack := code.max_stack()
-	bytecode := code.bytecode()
+	bytecode := code.code()
 	mut thread := new_thread()
 	mut frame := thread.new_frame(max_locals, max_stack)
 	thread.push_frame(mut frame)! // Enter frame

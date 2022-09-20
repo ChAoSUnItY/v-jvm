@@ -4,7 +4,7 @@ import vjvm.classfile { MemberInfo }
 
 pub struct ClassMember {
 	Access
-	owner_class &Class [required]
+	class &Class [required]
 mut:
 	name       string
 	descriptor string
@@ -25,7 +25,7 @@ pub fn (member &ClassMember) descriptor() string {
 }
 
 pub fn (member &ClassMember) class() &Class {
-	return member.owner_class
+	return member.class
 }
 
 pub fn (member &ClassMember) is_accessible_to(class &Class) bool {
@@ -33,12 +33,13 @@ pub fn (member &ClassMember) is_accessible_to(class &Class) bool {
 		return true
 	}
 
-	owner_class := member.owner_class
+	owner_class := member.class
 
 	if member.is_protected() {
 		return owner_class == class || class.is_sub_class_of(owner_class)
 			|| class.package_name() == owner_class.package_name()
 	} else if !member.is_private() {
+		return class.package_name() == owner_class.package_name()
 	} else {
 		return owner_class == class
 	}

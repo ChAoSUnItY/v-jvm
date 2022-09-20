@@ -19,7 +19,7 @@ pub fn (mut inst LOOKUP_SWITCH) fetch_operands(mut reader BytecodeReader) {
 
 pub fn (mut inst LOOKUP_SWITCH) execute(mut frame Frame) ! {
 	mut stack := frame.operand_stack()
-	key := stack.pop_int()!
+	key := stack.pop_int()
 	for i := 0; i < inst.n_pairs * 2; i += 2 {
 		if inst.match_offsets[i] == key {
 			branch(mut frame, inst.match_offsets[i + 1])

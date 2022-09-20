@@ -1,6 +1,7 @@
 module rtda
 
 import math { f32_bits, f32_from_bits, f64_bits, f64_from_bits }
+import vjvm.rtda.heap { Object }
 
 struct OperandStack {
 mut:
@@ -10,9 +11,9 @@ mut:
 
 fn new_operand_stack(max_size u32) &OperandStack {
 	return if max_size > 0 {
-		OperandStack{0, []Slot{len: int(max_size), init: Slot{}}}
+		&OperandStack{0, []Slot{len: int(max_size), init: Slot{}}}
 	} else {
-		none
+		unsafe { nil }
 	}
 }
 
@@ -36,13 +37,14 @@ pub fn (mut stack OperandStack) push_i64(val i64) {
 
 [inline]
 pub fn (mut stack OperandStack) push_f64(val f64) {
-	bits := i64(f64_bits(val))
-	stack.push(bits)
+	stack.push_i64(i64(f64_bits(val)))
 }
 
 [inline]
 pub fn (mut stack OperandStack) push_ref(val &Object) {
-	stack.slots[stack.size].ref = val
+	unsafe {
+		stack.slots[stack.size].ref = val
+	}
 }
 
 [inline]
@@ -53,7 +55,9 @@ pub fn (mut stack OperandStack) push_nil() {
 
 [inline]
 pub fn (mut stack OperandStack) push_slot(val Slot) {
-	stack.slots[stack.size] = val
+	unsafe {
+		stack.slots[stack.size] = val
+	}
 	stack.size++
 }
 
@@ -79,13 +83,13 @@ pub fn (mut stack OperandStack) pop_i64() i64 {
 
 [inline]
 pub fn (mut stack OperandStack) pop_f64() f64 {
-	return f64_from_bits(u64(stack.i64()!))
+	return f64_from_bits(u64(stack.pop_i64()))
 }
 
 [inline]
 pub fn (mut stack OperandStack) pop_ref() &Object {
 	stack.size--
-	return stack.slots[stak.size].ref
+	return stack.slots[stack.size].ref
 }
 
 [inline]

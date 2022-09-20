@@ -1,6 +1,5 @@
 module rtda
 
-import math
 import vjvm.rtda.heap { Object }
 
 pub struct Slot {

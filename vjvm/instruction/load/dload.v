@@ -8,7 +8,7 @@ pub struct DLOAD {
 }
 
 pub fn (mut inst DLOAD) execute(mut frame Frame) ! {
-	dload(mut frame, inst.index)!
+	dload(mut frame, inst.index)
 }
 
 pub struct DLOAD_0 {
@@ -16,7 +16,7 @@ pub struct DLOAD_0 {
 }
 
 pub fn (mut inst DLOAD_0) execute(mut frame Frame) ! {
-	dload(mut frame, 0)!
+	dload(mut frame, 0)
 }
 
 pub struct DLOAD_1 {
@@ -24,7 +24,7 @@ pub struct DLOAD_1 {
 }
 
 pub fn (mut inst DLOAD_1) execute(mut frame Frame) ! {
-	dload(mut frame, 1)!
+	dload(mut frame, 1)
 }
 
 pub struct DLOAD_2 {
@@ -32,7 +32,7 @@ pub struct DLOAD_2 {
 }
 
 pub fn (mut inst DLOAD_2) execute(mut frame Frame) ! {
-	dload(mut frame, 2)!
+	dload(mut frame, 2)
 }
 
 pub struct DLOAD_3 {
@@ -40,7 +40,7 @@ pub struct DLOAD_3 {
 }
 
 pub fn (mut inst DLOAD_3) execute(mut frame Frame) ! {
-	dload(mut frame, 3)!
+	dload(mut frame, 3)
 }
 
 [inline]

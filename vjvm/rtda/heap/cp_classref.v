@@ -8,7 +8,9 @@ pub struct ClassRef {
 
 fn new_class_ref(pool &ConstantPool, info &ConstantClassInfo) !ClassRef {
 	mut class_ref := ClassRef{}
-	ref.pool = pool
-	ref.info = info.class_name()!
+	unsafe {
+		class_ref.pool = pool
+	}
+	class_ref.class_name = info.class_name()!
 	return class_ref
 }

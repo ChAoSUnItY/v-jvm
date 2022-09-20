@@ -1,19 +1,15 @@
 module classfile
 
-[heap]
-struct ConstantPool {
-mut:
-	infos []ConstantInfo = []ConstantInfo{}
-}
+type ConstantPool = []ConstantInfo
 
 fn (mut reader ClassReader) read_constant_pool() !ConstantPool {
 	len := int(reader.read_u16())
-	mut pool := ConstantPool{[]ConstantInfo{len: len, init: ConstantInfo(ConstantPlaceHolderInfo{})}}
+	mut pool := []ConstantInfo{len: len, init: ConstantInfo(ConstantPlaceHolderInfo{})}
 
 	// The constant_pool table is indexed from 1 to constant_pool_count - 1.
 	for i := 1; i < len; i++ {
 		info := reader.read_constant_info(&pool)!
-		pool.infos[i] = info
+		pool[i] = info
 
 		// http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.5
 		// All 8-byte constants take up two entries in the constant_pool table of the class file.
@@ -28,19 +24,11 @@ fn (mut reader ClassReader) read_constant_pool() !ConstantPool {
 	return pool
 }
 
-pub fn (pool &ConstantPool) constant_infos() []ConstantInfo {
-	return pool.infos
-}
-
-pub fn (pool &ConstantPool) len() int {
-	return pool.infos.len
-}
-
 fn (pool &ConstantPool) get_constant_info(index u16) ConstantInfo {
-	if index >= pool.infos.len {
+	if index >= pool.len {
 		panic('Constant pool index out of bound')
 	}
-	return pool.infos[index]
+	return (*pool)[index]
 }
 
 fn (pool &ConstantPool) get_name_and_type(index u16) !(string, string) {

@@ -8,14 +8,16 @@ mut:
 	field &Field = unsafe { nil }
 }
 
-fn new_field_ref(pool &ConstantPool, info &ConstantFieldRefInfo) FieldRef {
+fn new_field_ref(pool &ConstantPool, info &ConstantFieldRefInfo) !FieldRef {
 	mut ref := FieldRef{}
-	ref.pool = pool
-	ref.copy_member_ref_info(info)
+	unsafe {
+		ref.pool = pool
+	}
+	ref.copy_member_ref_info(&info.ConstantClassMemberRefInfo)!
 	return ref
 }
 
-fn (mut ref FieldRef) resolve_field() !&Field {
+pub fn (mut ref FieldRef) resolve_field() !&Field {
 	if isnil(ref.field) {
 		ref.resolve_field_ref()!
 	}
@@ -36,16 +38,20 @@ fn (mut ref FieldRef) resolve_field_ref() ! {
 	ref.field = field
 }
 
-fn lookup_field(class &Class, name string, descriptor string) ?Field {
+fn lookup_field(class &Class, name string, descriptor string) ?&Field {
 	for field in class.fields {
 		if field.name == name && field.descriptor == descriptor {
-			return field
+			unsafe {
+				return field
+			}
 		}
 	}
 
 	for super_interface in class.interfaces {
 		if field := lookup_field(super_interface, name, descriptor) {
-			return field
+			unsafe {
+				return field
+			}
 		}
 	}
 

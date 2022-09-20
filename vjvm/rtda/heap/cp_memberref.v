@@ -1,6 +1,6 @@
 module heap
 
-import vjvm.classfile { ConstantMemberRefInfo }
+import vjvm.classfile { ConstantClassMemberRefInfo }
 
 pub struct MemberRef {
 	SymRef
@@ -9,8 +9,8 @@ mut:
 	descriptor string
 }
 
-fn (mut ref MemberRef) copy_member_ref_info(info &ConstantMemberRefInfo) {
-	ref.class_name = info.class_name()
+fn (mut ref MemberRef) copy_member_ref_info(info &ConstantClassMemberRefInfo) ! {
+	ref.class_name = info.class_name()!
 	ref.name, ref.descriptor = info.name_and_descriptor()!
 }
 
